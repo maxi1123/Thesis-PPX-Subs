@@ -1,5 +1,4 @@
 {
     "solidity.compileUsingRemoteVersion": "v0.8.14+commit.80d49f37",
-    "solidity.defaultCompiler": "localFile",
-    "solidity.compileUsingLocalVersion": "c:\\Users\\jones\\Documents\\GitHub\\Thesis-PPX-Subs\\soljson-v0.8.14+commit.80d49f37.js"
+    "solidity.defaultCompiler": "remote"
 }
