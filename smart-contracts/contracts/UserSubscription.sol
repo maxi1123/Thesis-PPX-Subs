@@ -18,11 +18,6 @@ contract UserSubscription {
         _;
     }
 
-    modifier onlyOps() {
-        require(msg.sender == _ops, "Only Ops");
-        _;
-    }
-
     modifier onlyOracle() {
         require(
             msg.sender == address(_usageOracle),
@@ -45,10 +40,6 @@ contract UserSubscription {
 
     IUsageOracle private _usageOracle;
 
-    address private immutable _ops = 0xc1C6805B857Bef1f412519C4A842522431aFed39;
-
-    bool private _latestUsageReceived;
-
     struct Subscription {
         bytes32 id;
         uint256 rate;
@@ -67,7 +58,6 @@ contract UserSubscription {
         _payee = payee;
         _token = IERC777(token);
         _usageOracle = IUsageOracle(usageOracle);
-        _latestUsageReceived = false;
     }
 
     function activeSubscription() public view returns (Subscription memory) {
@@ -83,7 +73,7 @@ contract UserSubscription {
     }
 
     function notifyUsageReceived() external onlyOracle {
-        _latestUsageReceived = true;
+        distribute();
     }
 
     function newDailySubscription(uint256 createdAt, uint256 expiresAt)
@@ -122,7 +112,7 @@ contract UserSubscription {
         );
     }
 
-    function distribute() external onlyOps {
+    function distribute() private {
         require(
             _activeSubscription.expiresAt < block.timestamp,
             "Subscription has not expired yet."
@@ -138,18 +128,6 @@ contract UserSubscription {
             _token.send(_payee, payeePayout, "");
             _token.send(_subscriber, subscriberPayout, "");
         }
-
-        _latestUsageReceived = false;
         _activeSubscription.status = SubscriptionStatus.TERMINATED;
-    }
-
-    function checker()
-        external
-        view
-        returns (bool canExec, bytes memory execPayload)
-    {
-        canExec = _latestUsageReceived;
-
-        execPayload = abi.encodeWithSelector(this.distribute.selector);
     }
 }

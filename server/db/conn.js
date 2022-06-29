@@ -1,5 +1,5 @@
-import { MongoClient } from "mongodb";
-import * as dotenv from "dotenv";
+import { MongoClient } from 'mongodb';
+import * as dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -17,8 +17,8 @@ const connectToServer = (callback) => {
             return callback(err);
         }
 
-        dbConnection = db.db("sample_analytics");
-        console.log("Successfully connected to MongoDB.");
+        dbConnection = db.db('sample_analytics');
+        console.log('Successfully connected to MongoDB.');
 
         return callback();
     });

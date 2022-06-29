@@ -1,0 +1,617 @@
+const contract = await hre.ethers.getContractAt(abi, "0x5fbdb2315678afecb367f032d93f642f64180aa3");
+contract["symbol"]()
+await hre.ethers.getSigners()
+clear console
+clear
+await hre.ethers.getSigners()
+hre.ethers.getSigners()
+contract["symbol"]()
+contract.symbol()
+contract
+console.log(await contract.symbol());
+console.log(await contract.balanceOf("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"));
+console.log(await hre.ethers.contract.balanceOf("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"));
+console.log(contract)
+const contract = await hre.ethers.getContractAt(abi, "0x5fbdb2315678afecb367f032d93f642f64180aa3");
+console.log(await hre.ethers.getContractAt(abi, "0x5fbdb2315678afecb367f032d93f642f64180aa3"));
+console.log(abi)
+  ]
+    }
+      "type": "function"
+      "stateMutability": "nonpayable",
+      ],
+        }
+          "type": "bool"
+          "name": "",
+          "internalType": "bool",
+        {
+      "outputs": [
+      "name": "transferFrom",
+      ],
+        }
+          "type": "uint256"
+          "name": "amount",
+          "internalType": "uint256",
+        {
+        },
+          "type": "address"
+          "name": "recipient",
+          "internalType": "address",
+        {
+        },
+          "type": "address"
+          "name": "holder",
+          "internalType": "address",
+        {
+      "inputs": [
+    {
+    },
+      "type": "function"
+      "stateMutability": "nonpayable",
+      ],
+        }
+          "type": "bool"
+          "name": "",
+          "internalType": "bool",
+        {
+      "outputs": [
+      "name": "transfer",
+      ],
+        }
+          "type": "uint256"
+          "name": "amount",
+          "internalType": "uint256",
+        {
+        },
+          "type": "address"
+          "name": "recipient",
+          "internalType": "address",
+        {
+      "inputs": [
+    {
+    },
+      "type": "function"
+      "stateMutability": "view",
+      ],
+        }
+          "type": "uint256"
+          "name": "",
+          "internalType": "uint256",
+        {
+      "outputs": [
+      "name": "totalSupply",
+      "inputs": [],
+    {
+    },
+      "type": "function"
+      "stateMutability": "view",
+      ],
+        }
+          "type": "string"
+          "name": "",
+          "internalType": "string",
+        {
+      "outputs": [
+      "name": "symbol",
+      "inputs": [],
+    {
+    },
+      "type": "function"
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "send",
+      ],
+        }
+          "type": "bytes"
+          "name": "data",
+          "internalType": "bytes",
+        {
+        },
+          "type": "uint256"
+          "name": "amount",
+          "internalType": "uint256",
+        {
+        },
+          "type": "address"
+          "name": "recipient",
+          "internalType": "address",
+        {
+      "inputs": [
+    {
+    },
+      "type": "function"
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "revokeOperator",
+      ],
+        }
+          "type": "address"
+          "name": "operator",
+          "internalType": "address",
+        {
+      "inputs": [
+    {
+    },
+      "type": "function"
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "operatorSend",
+      ],
+        }
+          "type": "bytes"
+          "name": "operatorData",
+          "internalType": "bytes",
+        {
+        },
+          "type": "bytes"
+          "name": "data",
+          "internalType": "bytes",
+        {
+        },
+          "type": "uint256"
+          "name": "amount",
+          "internalType": "uint256",
+        {
+        },
+          "type": "address"
+          "name": "recipient",
+          "internalType": "address",
+        {
+        },
+          "type": "address"
+          "name": "sender",
+          "internalType": "address",
+        {
+      "inputs": [
+    {
+    },
+      "type": "function"
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "operatorBurn",
+      ],
+        }
+          "type": "bytes"
+          "name": "operatorData",
+          "internalType": "bytes",
+        {
+        },
+          "type": "bytes"
+          "name": "data",
+          "internalType": "bytes",
+        {
+        },
+          "type": "uint256"
+          "name": "amount",
+          "internalType": "uint256",
+        {
+        },
+          "type": "address"
+          "name": "account",
+          "internalType": "address",
+        {
+      "inputs": [
+    {
+    },
+      "type": "function"
+      "stateMutability": "view",
+      ],
+        }
+          "type": "string"
+          "name": "",
+          "internalType": "string",
+        {
+      "outputs": [
+      "name": "name",
+      "inputs": [],
+    {
+    },
+      "type": "function"
+      "stateMutability": "view",
+      ],
+        }
+          "type": "bool"
+          "name": "",
+          "internalType": "bool",
+        {
+      "outputs": [
+      "name": "isOperatorFor",
+      ],
+        }
+          "type": "address"
+          "name": "tokenHolder",
+          "internalType": "address",
+        {
+        },
+          "type": "address"
+          "name": "operator",
+          "internalType": "address",
+        {
+      "inputs": [
+    {
+    },
+      "type": "function"
+      "stateMutability": "view",
+      ],
+        }
+          "type": "uint256"
+          "name": "",
+          "internalType": "uint256",
+        {
+      "outputs": [
+      "name": "granularity",
+      "inputs": [],
+    {
+    },
+      "type": "function"
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "destroy",
+      "inputs": [],
+    {
+    },
+      "type": "function"
+      "stateMutability": "view",
+      ],
+        }
+          "type": "address[]"
+          "name": "",
+          "internalType": "address[]",
+        {
+      "outputs": [
+      "name": "defaultOperators",
+      "inputs": [],
+    {
+    },
+      "type": "function"
+      "stateMutability": "pure",
+      ],
+        }
+          "type": "uint8"
+          "name": "",
+          "internalType": "uint8",
+        {
+      "outputs": [
+      "name": "decimals",
+      "inputs": [],
+    {
+    },
+      "type": "function"
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "burn",
+      ],
+        }
+          "type": "bytes"
+          "name": "data",
+          "internalType": "bytes",
+        {
+        },
+          "type": "uint256"
+          "name": "amount",
+          "internalType": "uint256",
+        {
+      "inputs": [
+    {
+    },
+      "type": "function"
+      "stateMutability": "view",
+      ],
+        }
+          "type": "uint256"
+          "name": "",
+          "internalType": "uint256",
+        {
+      "outputs": [
+      "name": "balanceOf",
+      ],
+        }
+          "type": "address"
+          "name": "tokenHolder",
+          "internalType": "address",
+        {
+      "inputs": [
+    {
+    },
+      "type": "function"
+      "stateMutability": "nonpayable",
+      "outputs": [],
+      "name": "authorizeOperator",
+      ],
+        }
+          "type": "address"
+          "name": "operator",
+          "internalType": "address",
+        {
+      "inputs": [
+    {
+    },
+      "type": "function"
+      "stateMutability": "nonpayable",
+      ],
+        }
+          "type": "bool"
+          "name": "",
+          "internalType": "bool",
+        {
+      "outputs": [
+      "name": "approve",
+      ],
+        }
+          "type": "uint256"
+          "name": "value",
+          "internalType": "uint256",
+        {
+        },
+          "type": "address"
+          "name": "spender",
+          "internalType": "address",
+        {
+      "inputs": [
+    {
+    },
+      "type": "function"
+      "stateMutability": "view",
+      ],
+        }
+          "type": "uint256"
+          "name": "",
+          "internalType": "uint256",
+        {
+      "outputs": [
+      "name": "allowance",
+      ],
+        }
+          "type": "address"
+          "name": "spender",
+          "internalType": "address",
+        {
+        },
+          "type": "address"
+          "name": "holder",
+          "internalType": "address",
+        {
+      "inputs": [
+    {
+    },
+      "type": "event"
+      "name": "Transfer",
+      ],
+        }
+          "type": "uint256"
+          "name": "value",
+          "internalType": "uint256",
+          "indexed": false,
+        {
+        },
+          "type": "address"
+          "name": "to",
+          "internalType": "address",
+          "indexed": true,
+        {
+        },
+          "type": "address"
+          "name": "from",
+          "internalType": "address",
+          "indexed": true,
+        {
+      "inputs": [
+      "anonymous": false,
+    {
+    },
+      "type": "event"
+      "name": "Sent",
+      ],
+        }
+          "type": "bytes"
+          "name": "operatorData",
+          "internalType": "bytes",
+          "indexed": false,
+        {
+        },
+          "type": "bytes"
+          "name": "data",
+          "internalType": "bytes",
+          "indexed": false,
+        {
+        },
+          "type": "uint256"
+          "name": "amount",
+          "internalType": "uint256",
+          "indexed": false,
+        {
+        },
+          "type": "address"
+          "name": "to",
+          "internalType": "address",
+          "indexed": true,
+        {
+        },
+          "type": "address"
+          "name": "from",
+          "internalType": "address",
+          "indexed": true,
+        {
+        },
+          "type": "address"
+          "name": "operator",
+          "internalType": "address",
+          "indexed": true,
+        {
+      "inputs": [
+      "anonymous": false,
+    {
+    },
+      "type": "event"
+      "name": "RevokedOperator",
+      ],
+        }
+          "type": "address"
+          "name": "tokenHolder",
+          "internalType": "address",
+          "indexed": true,
+        {
+        },
+          "type": "address"
+          "name": "operator",
+          "internalType": "address",
+          "indexed": true,
+        {
+      "inputs": [
+      "anonymous": false,
+    {
+    },
+      "type": "event"
+      "name": "Minted",
+      ],
+        }
+          "type": "bytes"
+          "name": "operatorData",
+          "internalType": "bytes",
+          "indexed": false,
+        {
+        },
+          "type": "bytes"
+          "name": "data",
+          "internalType": "bytes",
+          "indexed": false,
+        {
+        },
+          "type": "uint256"
+          "name": "amount",
+          "internalType": "uint256",
+          "indexed": false,
+        {
+        },
+          "type": "address"
+          "name": "to",
+          "internalType": "address",
+          "indexed": true,
+        {
+        },
+          "type": "address"
+          "name": "operator",
+          "internalType": "address",
+          "indexed": true,
+        {
+      "inputs": [
+      "anonymous": false,
+    {
+    },
+      "type": "event"
+      "name": "Burned",
+      ],
+        }
+          "type": "bytes"
+          "name": "operatorData",
+          "internalType": "bytes",
+          "indexed": false,
+        {
+        },
+          "type": "bytes"
+          "name": "data",
+          "internalType": "bytes",
+          "indexed": false,
+        {
+        },
+          "type": "uint256"
+          "name": "amount",
+          "internalType": "uint256",
+          "indexed": false,
+        {
+        },
+          "type": "address"
+          "name": "from",
+          "internalType": "address",
+          "indexed": true,
+        {
+        },
+          "type": "address"
+          "name": "operator",
+          "internalType": "address",
+          "indexed": true,
+        {
+      "inputs": [
+      "anonymous": false,
+    {
+    },
+      "type": "event"
+      "name": "AuthorizedOperator",
+      ],
+        }
+          "type": "address"
+          "name": "tokenHolder",
+          "internalType": "address",
+          "indexed": true,
+        {
+        },
+          "type": "address"
+          "name": "operator",
+          "internalType": "address",
+          "indexed": true,
+        {
+      "inputs": [
+      "anonymous": false,
+    {
+    },
+      "type": "event"
+      "name": "Approval",
+      ],
+        }
+          "type": "uint256"
+          "name": "value",
+          "internalType": "uint256",
+          "indexed": false,
+        {
+        },
+          "type": "address"
+          "name": "spender",
+          "internalType": "address",
+          "indexed": true,
+        {
+        },
+          "type": "address"
+          "name": "owner",
+          "internalType": "address",
+          "indexed": true,
+        {
+      "inputs": [
+      "anonymous": false,
+    {
+    },
+      "type": "constructor"
+      "stateMutability": "nonpayable",
+      ],
+        }
+          "type": "address"
+          "name": "owner_",
+          "internalType": "address payable",
+        {
+        },
+          "type": "address[]"
+          "name": "defaultOperators",
+          "internalType": "address[]",
+        {
+        },
+          "type": "uint256"
+          "name": "initialSupply",
+          "internalType": "uint256",
+        {
+      "inputs": [
+    {
+const abi = [
+console.log(await hre.ethers.signer.getAddress())
+hre.ethers.provider
+await hre.ethers.getProviders();
+hre.ethers.getSigners()
+hre.ethers.getProviders()
+hre.ethers.getProvider()
+console.log(hre)
+console.log(await hre.ethers.getSigners())
+console.log(hre.ethers.getSigners())
+console.log(await web3.eth.getBalance())
+ethers
+config
+console.log(ethers)
+const ethers = require("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-waffle");
