@@ -46,6 +46,8 @@ const SetupSubTab: FC<SetupSubTabPropsI> = ({
         if (currentSubscription[2] != 0 && currentSubscription[3] != null) {
           navigate('/streams');
         } else {
+          setFirstIsDisabled(true);
+          setSecondIsDisabled(false);
           setActiveIndex(1);
         }
       }
