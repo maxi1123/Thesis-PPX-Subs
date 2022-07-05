@@ -1,19 +1,38 @@
-import React from 'react';
-import { HlsVideoPlayer } from './components/hls-video-player';
+import { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
+import PrimeReact from 'primereact/api';
+import 'primereact/resources/themes/bootstrap4-dark-blue/theme.css'; //theme
+import 'primereact/resources/primereact.min.css'; //core css
+import 'primeicons/primeicons.css'; //icons
+import Home from './pages/Home/Home';
+import Onboarding from './pages/Onboarding/Onboarding';
+import Streams from './pages/Streams/Streams';
+
+import { defaultAuthContext, AuthContext } from './context/AuthContext';
+
+PrimeReact.ripple = true;
 
 function App() {
-    const hlsUrl =
-        'https://zba6-2-hls7-live.zahs.tv/HD_sf1/m.m3u8?z32=MF2WI2LPL5RW6ZDFMNZT2YLBMMTGG43JMQ6TCNSGIQ4DOOBTGA2DONCBINCDELJRGU3EGM2BGBCEIRCEIE3UCQKEEZUW42LUNFQWY4TBORST2MBGNVQXQ4TBORST2MZQGAZCM3LJNZZGC5DFHU3DAMBGONUWOPJYL4YTINZRG4YGEMDFGA2TINRSG43TQZLGHE4WGOBZGUZTCOBSGUZTQJTVONSXEX3JMQ6TGMBWGAZDOMBYEZ3D2MA';
-    return (
-        <HlsVideoPlayer
-            src={hlsUrl}
-            autoPlay={false}
-            controls={true}
-            width="60%"
-            height="auto"
-        ></HlsVideoPlayer>
-    );
+  const [authContext, setAuthContext] = useState(defaultAuthContext);
+  useEffect(() => {
+    if (typeof (window as any).ethereum !== 'undefined') {
+      console.log('MetaMask is installed!');
+    }
+  }, []);
+  return (
+    <AuthContext.Provider
+      value={{ ...authContext, setAuthContext: (v) => setAuthContext(v) }}
+    >
+      <div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/streams" element={<Streams />} />
+        </Routes>
+      </div>
+    </AuthContext.Provider>
+  );
 }
 
 export default App;

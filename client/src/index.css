@@ -1,4 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('primereact/resources/themes/bootstrap4-dark-blue/theme.css');
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inter';
+}
+
+html,
+body,
+div#root {
+  height: 100%;
+}
+
+html {
+  font-size: 14px;
+}
+
 body {
   margin: 0;
-  background-color: black;
+  background-color: var(--surface-ground);
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
 }

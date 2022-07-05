@@ -1,0 +1,44 @@
+.parentContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title,
+.subtitle,
+.text {
+  color: white;
+}
+
+.title {
+  margin-bottom: 1rem;
+  letter-spacing: 3.2px;
+}
+
+.subtitle {
+  margin-bottom: 10rem;
+}
+
+.subtitle,
+.text {
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 2rem;
+}

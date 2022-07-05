@@ -1,11 +1,11 @@
-require("@nomiclabs/hardhat-waffle");
+require('@nomiclabs/hardhat-waffle');
 
-task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
-    const accounts = await hre.ethers.getSigners();
+task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
+  const accounts = await hre.ethers.getSigners();
 
-    for (const account of accounts) {
-        console.log(account.address);
-    }
+  for (const account of accounts) {
+    console.log(account.address);
+  }
 });
 
 // const config = {
@@ -22,5 +22,10 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-    solidity: "0.8.14",
+  solidity: '0.8.14',
+  networks: {
+    hardhat: {
+      chainId: 1337,
+    },
+  },
 };

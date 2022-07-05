@@ -1,0 +1,11 @@
+.parentContainer {
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.panel {
+  margin-top: 10%;
+  width: 80%;
+}

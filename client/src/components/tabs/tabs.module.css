@@ -1,0 +1,23 @@
+.contentContainer {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.text {
+  font-weight: 300;
+}
+
+.userAddress {
+  letter-spacing: 2px;
+}
+
+.button {
+  margin-top: 3rem;
+}
+
+.customAccordion {
+  margin-top: 3rem;
+}
