@@ -130,7 +130,7 @@ const SetupSubTab: FC<SetupSubTabPropsI> = ({
       <AccordionTab header="CONFIRM PAYMENT" disabled={secondIsDisabled}>
         <div className={styles.contentContainer}>
           <p className={styles.text} style={{ width: '50%' }}>
-            As a third and last step, you must set up the payment scheme. This
+            As a fourth and last step, you must set up the payment scheme. This
             works as follows:
             <br />
             <br />
