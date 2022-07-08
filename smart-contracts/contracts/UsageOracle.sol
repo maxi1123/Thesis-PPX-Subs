@@ -3,18 +3,15 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-interface IUserSubscription {
-    function notifyUsageReceived() external;
-
-    function activeSubscriptionExpiresAt() external view returns (uint256);
-
-    function activeSubscriptionStatus() external view returns (uint8);
+interface ISubscriptionStore {
+    function notifyUsageReceived(address debtor, address payee) external;
 }
 
 contract UsageOracle is Ownable {
-    mapping(address => uint256) private _subscriptionAddressToUsage;
-
+    address private _subscriptionStore;
     uint256 private _activeRate;
+
+    mapping(address => mapping(address => uint256)) private _userToPayeeToUsage;
 
     function activeRate() public view returns (uint256) {
         return _activeRate;
@@ -24,28 +21,44 @@ contract UsageOracle is Ownable {
         _activeRate = newRate;
     }
 
-    function setUsage(address userSubscription, uint256 usage)
+    function subscriptionStore() public view returns (address) {
+        return _subscriptionStore;
+    }
+
+    function updateSubscriptionStoreAddress(address subStoreAddress)
         public
         onlyOwner
     {
-        require(
-            IUserSubscription(userSubscription).activeSubscriptionExpiresAt() <
-                block.timestamp &&
-                IUserSubscription(userSubscription)
-                    .activeSubscriptionStatus() ==
-                1,
-            "Subscription must have expired and must have status active!"
-        );
-
-        _subscriptionAddressToUsage[userSubscription] = usage;
-        IUserSubscription(userSubscription).notifyUsageReceived();
+        _subscriptionStore = subStoreAddress;
     }
 
-    function getUsageFromAddress(address userSubscription)
+    function getUsageFromAddress(address debtor, address payee)
         external
         view
         returns (uint256)
     {
-        return _subscriptionAddressToUsage[userSubscription];
+        return _userToPayeeToUsage[debtor][payee];
+    }
+
+    function setUsage(
+        address debtor,
+        address payee,
+        uint256 usage
+    ) public onlyOwner {
+        // require(
+        //     ISubscriptionStore(_subscriptionStore)
+        //         .activeSubscriptionExpiresAt() <
+        //         block.timestamp &&
+        //         ISubscriptionStore(_subscriptionStore)
+        //             .activeSubscriptionStatus() ==
+        //         1,
+        //     "Subscription must have expired and must have status active!"
+        // );
+
+        _userToPayeeToUsage[debtor][payee] = usage;
+        ISubscriptionStore(_subscriptionStore).notifyUsageReceived(
+            debtor,
+            payee
+        );
     }
 }
