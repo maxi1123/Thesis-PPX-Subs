@@ -1,37 +1,55 @@
-import { useEffect, useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import './App.css';
-import PrimeReact from 'primereact/api';
-import 'primereact/resources/themes/bootstrap4-dark-blue/theme.css'; //theme
-import 'primereact/resources/primereact.min.css'; //core css
-import 'primeicons/primeicons.css'; //icons
-import Home from './pages/Home/Home';
-import Onboarding from './pages/Onboarding/Onboarding';
-import Streams from './pages/Streams/Streams';
-
-import { defaultAuthContext, AuthContext } from './context/AuthContext';
+import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import PrimeReact from "primereact/api";
+import "primereact/resources/themes/bootstrap4-dark-blue/theme.css"; //theme
+import "primereact/resources/primereact.min.css"; //core css
+import "primeicons/primeicons.css"; //icons
+import Home from "./pages/home/home";
+import Onboarding from "./pages/onboarding/onboarding";
+import Streams from "./pages/streams/streams";
+import {
+  AuthContext,
+  AuthDataI,
+  defaultAuthContext,
+} from "./context/auth-context";
+import { useAuthStatus } from "./hooks/use-auth-status";
+import { ProgressSpinner } from "primereact/progressspinner";
+import styles from "./app.module.css";
 
 PrimeReact.ripple = true;
 
 function App() {
-  const [authContext, setAuthContext] = useState(defaultAuthContext);
+  const [authContext, setAuthContext] = useState<AuthDataI>(defaultAuthContext);
+
+  useAuthStatus(setAuthContext);
+
   useEffect(() => {
-    if (typeof (window as any).ethereum !== 'undefined') {
-      console.log('MetaMask is installed!');
+    if (typeof (window as any).ethereum !== "undefined") {
+      console.log("MetaMask is installed!");
     }
-  }, []);
+    console.log(authContext);
+  });
   return (
-    <AuthContext.Provider
-      value={{ ...authContext, setAuthContext: (v) => setAuthContext(v) }}
-    >
-      <div>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/streams" element={<Streams />} />
-        </Routes>
-      </div>
-    </AuthContext.Provider>
+    <div>
+      {authContext === defaultAuthContext && (
+        <div className={styles.spinnerWrapper}>
+          <ProgressSpinner />
+        </div>
+      )}
+      {authContext !== defaultAuthContext && (
+        <AuthContext.Provider
+          value={{
+            ...authContext,
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/streams" element={<Streams />} />
+          </Routes>
+        </AuthContext.Provider>
+      )}
+    </div>
   );
 }
 

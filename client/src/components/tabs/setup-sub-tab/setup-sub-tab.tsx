@@ -23,71 +23,71 @@ const SetupSubTab: FC<SetupSubTabPropsI> = ({
   const [secondIsDisabled, setSecondIsDisabled] = useState<boolean>(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const checks = async () => {
-      const tokenContract = new ethers.Contract(
-        web3.TOKEN_ADDRESS,
-        web3.TOKEN_ABI,
-        provider
-      );
-      const userAddresses = await provider.listAccounts();
-      const isOperator = await tokenContract.isOperatorFor(
-        userSubscriptionAddress,
-        userAddresses[0]
-      );
-      if (isOperator) {
-        const userSubscriptionContract = new ethers.Contract(
-          userSubscriptionAddress,
-          web3.USER_SUB_ABI,
-          provider
-        );
-        const currentSubscription =
-          await userSubscriptionContract.activeSubscription();
-        if (currentSubscription[2] != 0 && currentSubscription[3] != null) {
-          navigate('/streams');
-        } else {
-          setFirstIsDisabled(true);
-          setSecondIsDisabled(false);
-          setActiveIndex(1);
-        }
-      }
-    };
-    checks();
-  }, []);
-  const handleOnClick = async () => {
-    const contract = new ethers.Contract(
-      web3.STORE_ADDRESS,
-      web3.STORE_ABI,
-      provider.getSigner()
-    );
-    const accounts = await provider.listAccounts();
-    const subAddress = await contract.subscriptionFromUser(accounts[0]);
-    const subContract = new ethers.Contract(
-      subAddress,
-      web3.USER_SUB_ABI,
-      provider.getSigner()
-    );
-    // await provider.waitForTransaction(response.hash);
-    // callback(2);
-    const now = Math.floor(new Date().getTime() / 1000.0);
-    const DAY_IN_SECONDS = 86400;
-    console.log(now);
-    const response = await subContract.newDailySubscription(
-      now,
-      now + DAY_IN_SECONDS
-    );
-    await provider.waitForTransaction(response.hash);
-    const subscription = await subContract.activeSubscription();
-    console.log(subscription);
-    await axios.post('https://f450-185-193-225-26.eu.ngrok.io/api/v1/usage', {
-      subscriptionId: subscription[0],
-      usage: 0,
-      parentContract: subAddress,
-      createdAt: now,
-      expiresAt: now + DAY_IN_SECONDS,
-    });
-    navigate('/streams');
-  };
+  // useEffect(() => {
+  //   const checks = async () => {
+  //     const tokenContract = new ethers.Contract(
+  //       web3.TOKEN_ADDRESS,
+  //       web3.TOKEN_ABI,
+  //       provider
+  //     );
+  //     const userAddresses = await provider.listAccounts();
+  //     const isOperator = await tokenContract.isOperatorFor(
+  //       userSubscriptionAddress,
+  //       userAddresses[0]
+  //     );
+  //     if (isOperator) {
+  //       const userSubscriptionContract = new ethers.Contract(
+  //         userSubscriptionAddress,
+  //         web3.USER_SUB_ABI,
+  //         provider
+  //       );
+  //       const currentSubscription =
+  //         await userSubscriptionContract.activeSubscription();
+  //       if (currentSubscription[2] != 0 && currentSubscription[3] != null) {
+  //         navigate('/streams');
+  //       } else {
+  //         setFirstIsDisabled(true);
+  //         setSecondIsDisabled(false);
+  //         setActiveIndex(1);
+  //       }
+  //     }
+  //   };
+  //   checks();
+  // }, []);
+  // const handleOnClick = async () => {
+  //   const contract = new ethers.Contract(
+  //     web3.STORE_ADDRESS,
+  //     web3.STORE_ABI,
+  //     provider.getSigner()
+  //   );
+  //   const accounts = await provider.listAccounts();
+  //   const subAddress = await contract.subscriptionFromUser(accounts[0]);
+  //   const subContract = new ethers.Contract(
+  //     subAddress,
+  //     web3.USER_SUB_ABI,
+  //     provider.getSigner()
+  //   );
+  //   // await provider.waitForTransaction(response.hash);
+  //   // callback(2);
+  //   const now = Math.floor(new Date().getTime() / 1000.0);
+  //   const DAY_IN_SECONDS = 86400;
+  //   console.log(now);
+  //   const response = await subContract.newDailySubscription(
+  //     now,
+  //     now + DAY_IN_SECONDS
+  //   );
+  //   await provider.waitForTransaction(response.hash);
+  //   const subscription = await subContract.activeSubscription();
+  //   console.log(subscription);
+  //   await axios.post('https://f450-185-193-225-26.eu.ngrok.io/api/v1/usage', {
+  //     subscriptionId: subscription[0],
+  //     usage: 0,
+  //     parentContract: subAddress,
+  //     createdAt: now,
+  //     expiresAt: now + DAY_IN_SECONDS,
+  //   });
+  //   navigate('/streams');
+  // };
 
   const handleAllowOperator = async () => {
     const storeContract = new ethers.Contract(
@@ -144,7 +144,7 @@ const SetupSubTab: FC<SetupSubTabPropsI> = ({
           <Button
             label="Confirm Payment"
             className={`p-button-secondary p-button-lg ${styles.button}`}
-            onClick={handleOnClick}
+            // onClick={handleOnClick}
           ></Button>
         </div>
       </AccordionTab>
