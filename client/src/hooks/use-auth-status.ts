@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import { AuthContext, AuthDataI } from "../context/auth-context";
 
 import * as web3 from "../constants/contract-metadata";
-import { OnboardingStatus } from "../enums/onboarding-status";
+import { ONBOARDING_STATUS } from "../enums/onboarding-status";
 
 const provider = new ethers.providers.Web3Provider((window as any).ethereum);
 
@@ -20,67 +20,48 @@ const subscriptionStoreContract = new ethers.Contract(
 );
 
 const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
+const PAYEE = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
 
 export const useAuthStatus = (
-  setAuthContext: React.Dispatch<React.SetStateAction<AuthDataI>>
+  setAuthContext?: React.Dispatch<React.SetStateAction<AuthDataI>> | null
 ) => {
   const authData = useContext(AuthContext);
-
   useEffect(() => {
     const initAuthStatus = async () => {
       const accounts = await provider.listAccounts();
       setTimeout(async () => {
         if (accounts.length > 0) {
           authData.selectedAddress = accounts[0];
-          authData.onboardingStatus = OnboardingStatus.Connected;
+          authData.onboardingStatus = ONBOARDING_STATUS.Connected;
           const isOperator = await tokenContract.isOperatorFor(
-            NULL_ADDRESS,
+            web3.STORE_ADDRESS,
             authData.selectedAddress
           );
           if (isOperator) {
-            authData.onboardingStatus = OnboardingStatus.Operator;
+            authData.onboardingStatus = ONBOARDING_STATUS.Operator;
+            try {
+              const subscription =
+                await subscriptionStoreContract.activeSubscriptionFromUser(
+                  authData.selectedAddress,
+                  PAYEE
+                );
 
-            const subscription =
-              await subscriptionStoreContract.activeSubsctiptionFromUser(
-                authData.selectedAddress,
-                NULL_ADDRESS
-              );
-
-            const hasSubscription = subscription[1] !== NULL_ADDRESS;
-            if (hasSubscription) {
-              authData.onboardingStatus = OnboardingStatus.Completed;
+              const hasSubscription = subscription[1] !== NULL_ADDRESS;
+              if (hasSubscription) {
+                authData.onboardingStatus = ONBOARDING_STATUS.Completed;
+              }
+            } catch (e) {
+              console.warn(e);
             }
           }
         }
-        setAuthContext({ ...authData });
-        console.log("executing...");
-      }, 5000);
-      // if (accounts.length > 0) {
-      //   authData.selectedAddress = accounts[0];
-      //   authData.onboardingStatus = OnboardingStatus.Connected;
-      //   const isOperator = await tokenContract.isOperatorFor(
-      //     NULL_ADDRESS,
-      //     authData.selectedAddress
-      //   );
-      //   if (isOperator) {
-      //     authData.onboardingStatus = OnboardingStatus.Operator;
-
-      //     const subscription =
-      //       await subscriptionStoreContract.activeSubsctiptionFromUser(
-      //         authData.selectedAddress,
-      //         NULL_ADDRESS
-      //       );
-
-      //     const hasSubscription = subscription[1] !== NULL_ADDRESS;
-      //     if (hasSubscription) {
-      //       authData.onboardingStatus = OnboardingStatus.Completed;
-      //     }
-      //   }
-      // }
-      // setAuthContext({ ...authData });
-      // console.log("executing...");
+        setAuthContext && setAuthContext({ ...authData });
+      }, 1000);
     };
 
     initAuthStatus();
   }, [authData, setAuthContext]);
+  if (setAuthContext) {
+    return setAuthContext;
+  }
 };

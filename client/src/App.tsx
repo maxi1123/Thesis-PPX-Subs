@@ -1,12 +1,8 @@
-import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import PrimeReact from "primereact/api";
 import "primereact/resources/themes/bootstrap4-dark-blue/theme.css"; //theme
 import "primereact/resources/primereact.min.css"; //core css
 import "primeicons/primeicons.css"; //icons
-import Home from "./pages/home/home";
-import Onboarding from "./pages/onboarding/onboarding";
-import Streams from "./pages/streams/streams";
 import {
   AuthContext,
   AuthDataI,
@@ -15,6 +11,7 @@ import {
 import { useAuthStatus } from "./hooks/use-auth-status";
 import { ProgressSpinner } from "primereact/progressspinner";
 import styles from "./app.module.css";
+import AppRoutes from "./routes/app-routes";
 
 PrimeReact.ripple = true;
 
@@ -27,29 +24,22 @@ function App() {
     if (typeof (window as any).ethereum !== "undefined") {
       console.log("MetaMask is installed!");
     }
-    console.log(authContext);
   });
   return (
-    <div>
-      {authContext === defaultAuthContext && (
-        <div className={styles.spinnerWrapper}>
-          <ProgressSpinner />
-        </div>
-      )}
-      {authContext !== defaultAuthContext && (
-        <AuthContext.Provider
-          value={{
-            ...authContext,
-          }}
-        >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/streams" element={<Streams />} />
-          </Routes>
-        </AuthContext.Provider>
-      )}
-    </div>
+    <AuthContext.Provider
+      value={{
+        ...authContext,
+      }}
+    >
+      <div style={{ height: "100%" }}>
+        {authContext === defaultAuthContext && (
+          <div className={styles.spinnerWrapper}>
+            <ProgressSpinner />
+          </div>
+        )}
+        {authContext !== defaultAuthContext && <AppRoutes />}
+      </div>
+    </AuthContext.Provider>
   );
 }
 

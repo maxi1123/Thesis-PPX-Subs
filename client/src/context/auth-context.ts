@@ -1,14 +1,14 @@
 import { createContext } from "react";
-import { OnboardingStatus } from "../enums/onboarding-status";
+import { ONBOARDING_STATUS } from "../enums/onboarding-status";
 
 export interface AuthDataI {
   selectedAddress: string;
-  onboardingStatus: OnboardingStatus;
+  onboardingStatus: ONBOARDING_STATUS;
 }
 
 const defaultAuthContext: AuthDataI = {
   selectedAddress: "",
-  onboardingStatus: OnboardingStatus.Unboarded,
+  onboardingStatus: ONBOARDING_STATUS.Unboarded,
 };
 
 const AuthContext = createContext<AuthDataI>(defaultAuthContext);
