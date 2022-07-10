@@ -8,7 +8,6 @@ import * as web3 from "../../../constants/contract-metadata";
 
 import styles from "../tabs.module.css";
 import { useWeb3Provider } from "../../../hooks/use-web3-provider";
-import { useAuthStatus } from "../../../hooks/use-auth-status";
 import { AuthContext } from "../../../context/auth-context";
 import { ONBOARDING_STATUS } from "../../../enums/onboarding-status";
 import axios from "axios";
@@ -18,12 +17,10 @@ const SetupSubTab: FC = () => {
   const [firstIsDisabled, setFirstIsDisabled] = useState<boolean>(false);
   const [secondIsDisabled, setSecondIsDisabled] = useState<boolean>(true);
   const authData = useContext(AuthContext);
-  const setAuthContext = useAuthStatus();
   const navigate = useNavigate();
   const provider = useWeb3Provider();
 
   useEffect(() => {
-    console.log("ran second effect");
     if (authData.onboardingStatus === ONBOARDING_STATUS.Operator) {
       setActiveIndex(1);
     }
@@ -40,7 +37,7 @@ const SetupSubTab: FC = () => {
     setSecondIsDisabled(false);
     setFirstIsDisabled(true);
     authData.onboardingStatus = ONBOARDING_STATUS.Operator;
-    setAuthContext && setAuthContext({ ...authData });
+    authData.setAuthContext({ ...authData });
     setActiveIndex(1);
   };
 
@@ -62,8 +59,7 @@ const SetupSubTab: FC = () => {
       authData.selectedAddress,
       "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
     );
-    console.log(subscription);
-    await axios.post("https://f450-185-193-225-26.eu.ngrok.io/api/v1/usage", {
+    await axios.post("https://fbea-185-193-225-26.eu.ngrok.io/api/v1/usage", {
       subscriptionId: subscription[0],
       usage: 0,
       debtor: authData.selectedAddress,
@@ -72,7 +68,7 @@ const SetupSubTab: FC = () => {
       expiresAt: now + DAY_IN_SECONDS,
     });
     authData.onboardingStatus = ONBOARDING_STATUS.Completed;
-    setAuthContext && setAuthContext({ ...authData });
+    authData.setAuthContext({ ...authData });
     navigate("/streams");
   };
   return (

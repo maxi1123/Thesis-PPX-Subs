@@ -2,7 +2,6 @@ import { FC, useContext } from "react";
 import { Button } from "primereact/button";
 
 import styles from "../tabs.module.css";
-import { useAuthStatus } from "../../../hooks/use-auth-status";
 import { AuthContext } from "../../../context/auth-context";
 import { useWeb3Provider } from "../../../hooks/use-web3-provider";
 import { ONBOARDING_STATUS } from "../../../enums/onboarding-status";
@@ -14,7 +13,6 @@ interface ConnectWalletTabPropsI {
 const ConnectWalletTab: FC<ConnectWalletTabPropsI> = ({ callback }) => {
   const authData = useContext(AuthContext);
   const provider = useWeb3Provider();
-  const setAuthContext = useAuthStatus();
   const handleOnClick = async () => {
     await (window as any).ethereum.request({
       method: "eth_requestAccounts",
@@ -22,7 +20,7 @@ const ConnectWalletTab: FC<ConnectWalletTabPropsI> = ({ callback }) => {
     const accounts = await provider.listAccounts();
     authData.selectedAddress = accounts[0];
     authData.onboardingStatus = ONBOARDING_STATUS.Connected;
-    setAuthContext && setAuthContext({ ...authData });
+    authData.setAuthContext({ ...authData });
     callback(1);
   };
   return (

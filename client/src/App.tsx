@@ -18,6 +18,7 @@ PrimeReact.ripple = true;
 function App() {
   const [authContext, setAuthContext] = useState<AuthDataI>(defaultAuthContext);
 
+  // Initializes the context after defaultValue was used
   useAuthStatus(setAuthContext);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ function App() {
     <AuthContext.Provider
       value={{
         ...authContext,
+        setAuthContext,
       }}
     >
       <div style={{ height: "100%" }}>

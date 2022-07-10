@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { useContext, useEffect } from "react";
+import { SetStateAction, useContext, useEffect } from "react";
 import { AuthContext, AuthDataI } from "../context/auth-context";
 
 import * as web3 from "../constants/contract-metadata";
@@ -23,7 +23,7 @@ const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 const PAYEE = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
 
 export const useAuthStatus = (
-  setAuthContext?: React.Dispatch<React.SetStateAction<AuthDataI>> | null
+  callback: React.Dispatch<SetStateAction<AuthDataI>>
 ) => {
   const authData = useContext(AuthContext);
   useEffect(() => {
@@ -55,13 +55,10 @@ export const useAuthStatus = (
             }
           }
         }
-        setAuthContext && setAuthContext({ ...authData });
+        callback({ ...authData });
       }, 1000);
     };
 
     initAuthStatus();
-  }, [authData, setAuthContext]);
-  if (setAuthContext) {
-    return setAuthContext;
-  }
+  }, [authData, callback]);
 };
