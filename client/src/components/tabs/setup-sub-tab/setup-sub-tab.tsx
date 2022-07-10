@@ -80,7 +80,7 @@ const SetupSubTab: FC = () => {
       <AccordionTab header="ALLOW OPERATOR" disabled={firstIsDisabled}>
         <div className={styles.contentContainer}>
           <p className={styles.text} style={{ width: "50%" }}>
-            As a third step, you must allow your personal subscription contract
+            As a second step, you must allow your personal subscription contract
             to transfer tokens on your behalf.
           </p>
           <Button
@@ -93,7 +93,7 @@ const SetupSubTab: FC = () => {
       <AccordionTab header="CONFIRM PAYMENT" disabled={secondIsDisabled}>
         <div className={styles.contentContainer}>
           <p className={styles.text} style={{ width: "50%" }}>
-            As a fourth and last step, you must set up the payment scheme. This
+            As a third and last step, you must set up the payment scheme. This
             works as follows:
             <br />
             <br />
