@@ -1,19 +1,19 @@
-import ethers from 'ethers';
+import ethers from "ethers";
 
 let provider;
 let signer;
 
 const init = () => {
-    provider = new ethers.providers.JsonRpcProvider();
-    signer = provider.getSigner();
+  provider = new ethers.providers.getDefaultProvider("http://localhost:8545");
+  signer = provider.getSigner();
 };
 
 const getProvider = () => {
-    return provider;
+  return provider;
 };
 
 const getSigner = () => {
-    return signer;
+  return signer;
 };
 
 export { init, getProvider, getSigner };

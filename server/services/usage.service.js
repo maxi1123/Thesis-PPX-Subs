@@ -30,15 +30,14 @@ const deleteDocument = (subscriptionId) => {
 };
 
 const postToOracle = async (debtor, payee, usage) => {
-  const address = "0x077530692a3f45Ff0C7b062699B96f67DA5c643E";
+  const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
   const abi = [
     "function setUsage(address debtor, address payee, uint256 usage) public",
   ];
   const contract = new ethers.Contract(address, abi, web3.getSigner());
   console.log(await web3.getSigner().getAddress());
-  console.log(subscriptionAddress, usage);
-  const intUsage = Number(usage);
-  return contract.setUsage(debtor, payee, intUsage);
+  console.log(payee, Number(usage["$numberInt"]));
+  return contract.setUsage(debtor, payee, Number(usage["$numberInt"]));
 };
 
 const updateUsage = (subscriptionId) => {
