@@ -13,14 +13,10 @@ const Onboarding: FC = () => {
   const authData = useContext(AuthContext);
 
   useEffect(() => {
-    if (
-      authData.onboardingStatus === ONBOARDING_STATUS.Connected ||
-      authData.onboardingStatus === ONBOARDING_STATUS.Operator
-    ) {
-      setActiveIndex(1);
-    } else {
-      setActiveIndex(0);
-    }
+    authData.onboardingStatus === ONBOARDING_STATUS.Connected ||
+    authData.onboardingStatus === ONBOARDING_STATUS.Operator
+      ? setActiveIndex(1)
+      : setActiveIndex(0);
   }, [authData.onboardingStatus]);
 
   const items = [{ label: "CONNECT YOUR WALLET" }, { label: "SET UP PAYMENT" }];

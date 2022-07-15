@@ -3,6 +3,6 @@ import * as streamsController from "../controllers/streams.controller.js";
 const router = express.Router();
 
 router.get("/", streamsController.get);
-router.get("/streamUrl", streamsController.getStreamUrl);
+router.post("/", streamsController.getStreamUrl);
 
 export default router;

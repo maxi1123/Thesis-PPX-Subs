@@ -4,6 +4,8 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC777/IERC777.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+// import "./UserSubscription.sol";
+
 interface IUsageOracle {
     function activeRate() external view returns (uint256);
 
@@ -138,20 +140,48 @@ contract SubscriptionStore is Ownable {
             payee
         );
 
-        if (usage == 0) {
-            _token.send(debtor, _userToPayeeToLockedTokens[debtor][payee], "");
-            _userToPayeeToLockedTokens[debtor][payee] = 0;
+        if (
+            block.timestamp >
+            _userToPayeeToSubscription[debtor][payee].expiresAt
+        ) {
+            if (usage == 0) {
+                _token.send(
+                    debtor,
+                    _userToPayeeToLockedTokens[debtor][payee],
+                    ""
+                );
+                _userToPayeeToLockedTokens[debtor][payee] = 0;
+            } else {
+                (
+                    uint256 payeePayout,
+                    uint256 subscriberPayout
+                ) = _calculatePayouts(debtor, payee, usage);
+                _token.send(payee, payeePayout, "");
+                _token.send(debtor, subscriberPayout, "");
+                _userToPayeeToLockedTokens[debtor][payee] = 0;
+            }
+            _userToPayeeToSubscription[debtor][payee]
+                .status = SubscriptionStatus.TERMINATED;
         } else {
-            uint256 payeePayout = (_userToPayeeToSubscription[debtor][payee]
-                .rate * usage);
-            uint256 subscriberPayout = _userToPayeeToLockedTokens[debtor][
-                payee
-            ] - payeePayout;
-            _token.send(payee, payeePayout, "");
-            _token.send(debtor, subscriberPayout, "");
-            _userToPayeeToLockedTokens[debtor][payee] = 0;
+            if (usage > 0) {
+                uint256 payeePayout = (_userToPayeeToSubscription[debtor][payee]
+                    .rate * usage);
+                _token.send(payee, payeePayout, "");
+                _userToPayeeToLockedTokens[debtor][payee] -= payeePayout;
+            }
         }
-        _userToPayeeToSubscription[debtor][payee].status = SubscriptionStatus
-            .TERMINATED;
+    }
+
+    function _calculatePayouts(
+        address debtor,
+        address payee,
+        uint256 usage
+    ) private view returns (uint256, uint256) {
+        uint256 payeePayout = (_userToPayeeToSubscription[debtor][payee].rate *
+            usage);
+        uint256 subscriberPayout = (_userToPayeeToLockedTokens[debtor][payee] -
+            payeePayout);
+
+        return (payeePayout, subscriberPayout);
     }
 }

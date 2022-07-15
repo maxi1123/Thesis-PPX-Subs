@@ -8,10 +8,12 @@ const setDb = () => {
   dbConnect = dbo.getDb();
 };
 
+// get all documents
 const getDocuments = () => {
   return dbConnect.collection("usage").find({}).toArray();
 };
 
+// post initial subscription to database
 const addDocument = (subscriptionId, usage = 0, debtor, payee, start, end) => {
   const usageDocument = {
     subscription_id: subscriptionId,
@@ -24,11 +26,14 @@ const addDocument = (subscriptionId, usage = 0, debtor, payee, start, end) => {
   return dbConnect.collection("usage").insertOne(usageDocument);
 };
 
+// delete subscription from database
 const deleteDocument = (subscriptionId) => {
   const listingQuery = { subscription_id: subscriptionId };
   return dbConnect.collection("usage").deleteOne(listingQuery);
 };
 
+// @calledBy Database
+// post usage to oracle
 const postToOracle = async (debtor, payee, usage) => {
   const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
   const abi = [
@@ -40,6 +45,7 @@ const postToOracle = async (debtor, payee, usage) => {
   return contract.setUsage(debtor, payee, Number(usage["$numberInt"]));
 };
 
+// increases usage counter
 const updateUsage = (subscriptionId) => {
   const listingQuery = { subscription_id: subscriptionId };
   const updates = {

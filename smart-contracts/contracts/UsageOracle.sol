@@ -45,16 +45,6 @@ contract UsageOracle is Ownable {
         address payee,
         uint256 usage
     ) public onlyOwner {
-        // require(
-        //     ISubscriptionStore(_subscriptionStore)
-        //         .activeSubscriptionExpiresAt() <
-        //         block.timestamp &&
-        //         ISubscriptionStore(_subscriptionStore)
-        //             .activeSubscriptionStatus() ==
-        //         1,
-        //     "Subscription must have expired and must have status active!"
-        // );
-
         _userToPayeeToUsage[debtor][payee] = usage;
         ISubscriptionStore(_subscriptionStore).notifyUsageReceived(
             debtor,
