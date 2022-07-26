@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.videoPlayerContainer {
+  width: 50%;
+}
+
+.header {
+  display: flex;
+  margin-bottom: 3rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subtitle {
+  font-weight: 300;
+  letter-spacing: 2px;
+}
