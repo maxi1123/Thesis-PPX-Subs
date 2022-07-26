@@ -1,113 +1,90 @@
-import axios from "axios";
-import { FC, useEffect, useRef, useState } from "react";
-import videojs from "video.js";
-import VideoJS from "../../components/video-js";
+import { FC, useContext, useEffect, useState } from "react";
 import styles from "./streams.module.css";
-// import { HlsVideoPlayer } from "../../components/hls-video-player";
+import BbcOneLogo from "../../assets/bbc-one.svg";
+import { ethers } from "ethers";
+import { useWeb3Provider } from "../../hooks/use-web3-provider";
+import * as web3 from "../../constants/contract-metadata";
+import { AuthContext } from "../../context/auth-context";
+import { Button } from "primereact/button";
+import axios from "axios";
+import StreamGrid from "../../components/stream-grid/stream-grid";
 
-const BASE_URL = "http://localhost:3333/api/v1/streams";
+const PAYEE = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
 
 const Streams: FC = () => {
-  const [streamList, setStreamList] = useState<Array<string>>([]);
-  const playerRef = useRef(null);
-  const videoJsOptions = {
-    autoplay: true,
-    controls: true,
-    responsive: true,
-    fluid: true,
-  };
-
-  // const videoJsOptions = {
-  //   autoplay: true,
-  //   controls: true,
-  //   responsive: true,
-  //   fluid: true,
-  //   sources: [
-  //     {
-  //       src: "https://zh2-11-hls7-live.zahs.tv/BBC1/m.m3u8?z32=MF2WI2LPL5RW6ZDFMNZT2YLBMMTGG43JMQ6TCNZQGBBUKOJZIM4DKQRZG5BTELJWIM2EKNSCGMYEEQRTHA3DGMJXEZUW42LUNFQWY4TBORST2MBGNVQXQ4TBORST2MJVGAYSM3LJNZZGC5DFHU3DAMBGONUWOPJWL4ZDGMTDMYYDOMJUG44WKMDFHBQTAZLFGUZWMYTBHBRGGZJWG43GKJTVONSXEX3JMQ6TGMBWGAZDOMBYEZ3D2MA",
-  //       type: "application/x-mpegURL",
-  //     },
-  //   ],
-  // };
-
-  // const videoJsOptionsSecond = {
-  //   autoplay: true,
-  //   controls: true,
-  //   responsive: true,
-  //   fluid: true,
-  //   sources: [
-  //     {
-  //       src: "https://zh2-11-hls7-live.zahs.tv/HD_sf1/m.m3u8?z32=MF2WI2LPL5RW6ZDFMNZT2YLBMMTGG43JMQ6TCNZQGBCTMNJVGNAUCMCEINATILKCIJDEGQJRIU3DKOCDHEZEGNBGNFXGS5DJMFWHEYLUMU6TAJTNMF4HEYLUMU6TGMBQGITG22LOOJQXIZJ5GYYDAJTTNFTT2OC7GAZGGNDCMJSTSZBRMFQTIYRYHFSTEOJSGM4TMODEGI2WIMZXMZRCM5LTMVZF62LEHUZTANRQGI3TAOBGOY6TA",
-  //       type: "application/x-mpegURL",
-  //     },
-  //   ],
-  // };
+  const [subscriptionActive, setSubscriptionActive] = useState<boolean>(false);
+  const provider = useWeb3Provider();
+  const authData = useContext(AuthContext);
+  const subscriptionStoreContract = new ethers.Contract(
+    web3.STORE_ADDRESS,
+    web3.STORE_ABI,
+    provider
+  );
 
   useEffect(() => {
-    console.log("ran effect");
-    const _fetchStreamList = async () => {
-      const result = await axios.get(`${BASE_URL}`);
-      const streamListArr: Array<string> = [];
-      result.data.forEach((elem: { alias: string }) => {
-        streamListArr.push(elem.alias);
-      });
-      setStreamList(streamListArr);
+    const _fetchSubscription = async () => {
+      const subscription =
+        await subscriptionStoreContract.activeSubscriptionFromUser(
+          authData.selectedAddress,
+          PAYEE
+        );
+      console.log(subscription);
+      if (subscription[5] === 1) {
+        setSubscriptionActive(true);
+      } else {
+        setSubscriptionActive(false);
+      }
     };
-
-    _fetchStreamList();
+    _fetchSubscription();
   }, []);
 
-  const handlePlayerReady = (player: any) => {
-    playerRef.current = player;
-
-    // You can handle player events here, for example:
-    player.on("waiting", () => {
-      videojs.log("player is waiting");
-    });
-
-    player.on("dispose", () => {
-      videojs.log("player will dispose");
+  const handleOnClick = async () => {
+    const now = Math.floor(new Date().getTime() / 1000.0);
+    const DAY_IN_SECONDS = 86400;
+    const response = await subscriptionStoreContract.newDailySubscription(
+      "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      now,
+      now + 600
+    );
+    await provider.waitForTransaction(response.hash);
+    const subscription =
+      await subscriptionStoreContract.activeSubscriptionFromUser(
+        authData.selectedAddress,
+        "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      );
+    await axios.post("https://5987-89-206-112-12.eu.ngrok.io/api/v1/usage", {
+      subscriptionId: subscription[0],
+      usage: 0,
+      debtor: authData.selectedAddress,
+      payee: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      createdAt: now,
+      expiresAt: now + 600,
     });
   };
   return (
-    <div className={styles.gridContainer}>
-      <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
-      {/* <VideoJS options={videoJsOptionsSecond} onReady={handlePlayerReady} /> */}
-      <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
+    <div className={styles.root}>
+      {subscriptionActive && (
+        <div>
+          <h2 className={styles.subtitle}>
+            Please select a stream you want to watch
+          </h2>
+          <StreamGrid />
+        </div>
+      )}
+      {!subscriptionActive && (
+        <div className={styles.renewalContainer}>
+          <h2 className={styles.subtitle}>
+            Please renew your subscription to continue watching
+          </h2>
+          <Button
+            label="Renew Subscription"
+            className={`p-button-primary p-button-lg ${styles.button}`}
+            onClick={handleOnClick}
+          ></Button>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Streams;
-
-// const video = useRef(null);
-
-// useEffect(() => {
-//   const currentVideo = video.current;
-//   const hls = new Hls();
-//   if (currentVideo !== null) {
-//     hls.attachMedia(currentVideo);
-//     (currentVideo as HTMLVideoElement).addEventListener("play", () => {
-//       console.log("Video played...");
-//     });
-//     (currentVideo as HTMLVideoElement).addEventListener("pause", () => {
-//       console.log("Video paused...");
-//     });
-//     hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-//       hls.loadSource(
-//         "https://zh2-11-hls7-live.zahs.tv/BBC1/m.m3u8?z32=MF2WI2LPL5RW6ZDFMNZT2YLBMMTGG43JMQ6TCNZQGBBUKOJZIM4DKQRZG5BTELJWIM2EKNSCGMYEEQRTHA3DGMJXEZUW42LUNFQWY4TBORST2MBGNVQXQ4TBORST2MJVGAYSM3LJNZZGC5DFHU3DAMBGONUWOPJWL4ZDGMTDMYYDOMJUG44WKMDFHBQTAZLFGUZWMYTBHBRGGZJWG43GKJTVONSXEX3JMQ6TGMBWGAZDOMBYEZ3D2MA"
-//       );
-//       hls.on(Hls.Events.MANIFEST_PARSED, (_event, data) => {
-//         console.log(
-//           "manifest loaded, found " + data.levels.length + " quality level"
-//         );
-//         (currentVideo as HTMLVideoElement)
-//           .play()
-//           .then(() => console.log("triggered play()"))
-//           .catch((error) => {
-//             console.log(error);
-//           });
-//       });
-//     });
-//   }
-// }, [hasClicked]);

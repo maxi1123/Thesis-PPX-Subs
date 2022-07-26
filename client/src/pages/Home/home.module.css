@@ -6,12 +6,6 @@
   align-items: center;
 }
 
-.title,
-.subtitle,
-.text {
-  color: white;
-}
-
 .title {
   margin-bottom: 1rem;
   letter-spacing: 3.2px;

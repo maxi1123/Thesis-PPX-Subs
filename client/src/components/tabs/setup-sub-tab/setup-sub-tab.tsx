@@ -52,20 +52,20 @@ const SetupSubTab: FC = () => {
     const response = await storeContract.newDailySubscription(
       "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
       now,
-      now + 600
+      now + DAY_IN_SECONDS
     );
     await provider.waitForTransaction(response.hash);
     const subscription = await storeContract.activeSubscriptionFromUser(
       authData.selectedAddress,
       "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
     );
-    await axios.post("https://fbea-185-193-225-26.eu.ngrok.io/api/v1/usage", {
+    await axios.post("https://5987-89-206-112-12.eu.ngrok.io/api/v1/usage", {
       subscriptionId: subscription[0],
       usage: 0,
       debtor: authData.selectedAddress,
       payee: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
       createdAt: now,
-      expiresAt: now + 600,
+      expiresAt: now + DAY_IN_SECONDS,
     });
     authData.onboardingStatus = ONBOARDING_STATUS.Completed;
     authData.setAuthContext({ ...authData });

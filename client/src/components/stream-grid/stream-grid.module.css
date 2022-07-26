@@ -1,0 +1,23 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flexContainer {
+  margin-top: 3rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.flexItem {
+  filter: grayscale(100%);
+}
+
+.flexItem:hover {
+  cursor: pointer;
+  filter: grayscale(0%);
+  transition: 175ms ease-in-out;
+}

@@ -30,7 +30,7 @@ const ConnectWalletTab: FC<ConnectWalletTabPropsI> = ({ callback }) => {
       </p>
       <Button
         label="Connect Wallet"
-        className={`p-button-secondary p-button-lg ${styles.button}`}
+        className={`p-button-primary p-button-lg ${styles.button}`}
         onClick={handleOnClick}
       ></Button>
     </div>
