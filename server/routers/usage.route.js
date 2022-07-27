@@ -7,5 +7,6 @@ router.post("/", usageController.post);
 router.delete("/", usageController.deleteEntry);
 router.post("/db", usageController.postUsage);
 router.post("/oracle", usageController.postToOracle);
+router.put("/subscription", usageController.terminateSubscription)
 
 export default router;

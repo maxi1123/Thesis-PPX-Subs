@@ -1,6 +1,5 @@
 import { FC, useContext, useEffect, useState } from "react";
 import styles from "./streams.module.css";
-import BbcOneLogo from "../../assets/bbc-one.svg";
 import { ethers } from "ethers";
 import { useWeb3Provider } from "../../hooks/use-web3-provider";
 import * as web3 from "../../constants/contract-metadata";
@@ -12,13 +11,13 @@ import StreamGrid from "../../components/stream-grid/stream-grid";
 const PAYEE = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
 
 const Streams: FC = () => {
-  const [subscriptionActive, setSubscriptionActive] = useState<boolean>(false);
+  const [subscriptionActive, setSubscriptionActive] = useState<boolean>(true);
   const provider = useWeb3Provider();
   const authData = useContext(AuthContext);
   const subscriptionStoreContract = new ethers.Contract(
     web3.STORE_ADDRESS,
     web3.STORE_ABI,
-    provider
+    provider.getSigner()
   );
 
   useEffect(() => {
@@ -28,7 +27,6 @@ const Streams: FC = () => {
           authData.selectedAddress,
           PAYEE
         );
-      console.log(subscription);
       if (subscription[5] === 1) {
         setSubscriptionActive(true);
       } else {
@@ -44,7 +42,7 @@ const Streams: FC = () => {
     const response = await subscriptionStoreContract.newDailySubscription(
       "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
       now,
-      now + 600
+      now + DAY_IN_SECONDS
     );
     await provider.waitForTransaction(response.hash);
     const subscription =
@@ -58,7 +56,7 @@ const Streams: FC = () => {
       debtor: authData.selectedAddress,
       payee: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
       createdAt: now,
-      expiresAt: now + 600,
+      expiresAt: now + DAY_IN_SECONDS,
     });
   };
   return (

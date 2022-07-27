@@ -1,10 +1,14 @@
 import axios from "axios";
+import { ethers } from "ethers";
 import { Button } from "primereact/button";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import videojs from "video.js";
 import VideoJS from "../../components/video-players/video-js";
 import styles from "./stream-player.module.css";
+import * as web3 from "../../constants/contract-metadata";
+import { useWeb3Provider } from "../../hooks/use-web3-provider";
+import { AuthContext } from "../../context/auth-context";
 
 interface VideoJsOptionsI {
   autoplay: boolean;
@@ -32,9 +36,29 @@ const StreamPlayer: FC = () => {
     ...defaultOptions,
   });
   const [loading, setLoading] = useState<boolean>(true);
-  const { channel } = useParams();
+  // const [initialReported, setInitialReported] = useState<boolean>(false);
+  // const [isPaused, setIsPaused] = useState<boolean>(false);
+
+  const authData = useContext(AuthContext);
+
   const playerRef = useRef(null);
+  const subscriptionIdRef = useRef<string>("");
+
+  const lastReportedUnixRef = useRef<number>(0);
+  const timeCredit = useRef<number | null>(null);
+  const isPausedRef = useRef<boolean>(false);
+  const isInitialReported = useRef<boolean>(false);
+
+  const { channel } = useParams();
   const navigate = useNavigate();
+
+  const provider = useWeb3Provider();
+
+  const subscriptionStoreContract = new ethers.Contract(
+    web3.STORE_ADDRESS,
+    web3.STORE_ABI,
+    provider.getSigner()
+  );
 
   useEffect(() => {
     const _fetchStreamUrl = async () => {
@@ -51,13 +75,24 @@ const StreamPlayer: FC = () => {
       setLoading(false);
     };
 
+    const _fetchSubscription = async () => {
+      const subscription =
+        await subscriptionStoreContract.activeSubscriptionFromUser(
+          authData.selectedAddress,
+          "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+        );
+      if (subscription[5] !== 1) {
+        navigate("/streams");
+      }
+    };
+
     _fetchStreamUrl();
+    _fetchSubscription();
   }, []);
 
   const handlePlayerReady = (player: any) => {
     playerRef.current = player;
 
-    // You can handle player events here, for example:
     player.on("waiting", () => {
       videojs.log("player is waiting");
     });
@@ -65,7 +100,78 @@ const StreamPlayer: FC = () => {
     player.on("dispose", () => {
       videojs.log("player will dispose");
     });
+
+    player.on("pause", () => {
+      videojs.log("player paused");
+      isPausedRef.current = true;
+      if (!timeCredit.current) {
+        timeCredit.current =
+          Math.floor(new Date().getTime() / 1000.0) -
+          lastReportedUnixRef.current;
+      } else {
+        timeCredit.current =
+          timeCredit.current +
+          (Math.floor(new Date().getTime() / 1000.0) -
+            lastReportedUnixRef.current);
+      }
+      console.log(timeCredit.current);
+    });
+
+    player.on("play", async () => {
+      videojs.log("player started");
+      lastReportedUnixRef.current = Math.floor(new Date().getTime() / 1000.0);
+      isPausedRef.current = false;
+      if (!isInitialReported.current) {
+        const subscription =
+          await subscriptionStoreContract.activeSubscriptionFromUser(
+            authData.selectedAddress,
+            "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+          );
+        await axios.post(
+          "https://5987-89-206-112-12.eu.ngrok.io/api/v1/usage/db",
+          {
+            subscriptionId: subscription[0],
+          }
+        );
+        subscriptionIdRef.current = subscription[0];
+        isInitialReported.current = true;
+      }
+      startTimeClock();
+    });
   };
+
+  const startTimeClock = async () => {
+    console.log("timeclock executed", "is paused:", isPausedRef.current);
+    const now = Math.floor(new Date().getTime() / 1000.0);
+    if (timeCredit.current) {
+      if (
+        now - (lastReportedUnixRef.current as number) >=
+        60 - timeCredit.current
+      ) {
+        await axios.post(
+          "https://5987-89-206-112-12.eu.ngrok.io/api/v1/usage/db",
+          {
+            subscriptionId: subscriptionIdRef.current,
+          }
+        );
+        lastReportedUnixRef.current = now;
+        timeCredit.current = null;
+      }
+    } else {
+      if (now - (lastReportedUnixRef.current as number) >= 60) {
+        await axios.post(
+          "https://5987-89-206-112-12.eu.ngrok.io/api/v1/usage/db",
+          {
+            subscriptionId: subscriptionIdRef.current,
+          }
+        );
+        lastReportedUnixRef.current = now;
+      }
+    }
+
+    !isPausedRef.current && setTimeout(startTimeClock, 1000);
+  };
+
   return (
     <div className={styles.root}>
       {loading && <div>LOADING STREAM...</div>}

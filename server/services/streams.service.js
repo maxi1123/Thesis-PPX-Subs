@@ -9,15 +9,15 @@ const zattoo = new Zattoo({
 const getStreamList = async () => {
   let helper = new Array();
   const channels = await zattoo.getChannelList();
-  helper = channels.channel_groups[0].channels.map((channel) => ({
-    alias: channel.display_alias,
-  }));
-  console.log(helper);
-  return helper;
+  // helper = channels.channel_groups[0].channels.map((channel) => ({
+  //   alias: channel.display_alias,
+  // }));
+  return channels;
 };
 
 const getStreamUrl = async (channelId) => {
   const streamUrl = await zattoo.getStreamUrls(channelId);
+  // console.log(streamUrl);
   return streamUrl[0].url;
 };
 

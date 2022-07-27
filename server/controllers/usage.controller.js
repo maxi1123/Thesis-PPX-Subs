@@ -88,4 +88,24 @@ async function postUsage(req, res) {
   }
 }
 
-export { get, post, postToOracle, postUsage, deleteEntry };
+async function terminateSubscription(req, res) {
+  try {
+    if (
+      req.body.debtor == undefined ||
+      req.body.payee == undefined
+    ) {
+      throw new Error("Faulty JSON!");
+    }
+    await usageService.terminateSubscription(
+      req.body.debtor,
+      req.body.payee
+    );
+    console.log(`Terminated Subscription!`);
+    res.status(204).send();
+  } catch (err) {
+    console.error(`Error `, err.message);
+    res.status(400).send("Error terminating Subscription!");
+  }
+}
+
+export { get, post, postToOracle, postUsage, deleteEntry, terminateSubscription };

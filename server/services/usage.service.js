@@ -41,8 +41,11 @@ const postToOracle = async (debtor, payee, usage) => {
   ];
   const contract = new ethers.Contract(address, abi, web3.getSigner());
   console.log(await web3.getSigner().getAddress());
-  console.log(payee, Number(usage["$numberInt"]));
-  return contract.setUsage(debtor, payee, Number(usage["$numberInt"]));
+  console.log(payee, usage);
+
+  return "$numberLong" in usage
+    ? contract.setUsage(debtor, payee, Number(usage["$numberLong"]))
+    : contract.setUsage(debtor, payee, Number(usage["$numberInt"]));
 };
 
 // increases usage counter
@@ -57,6 +60,15 @@ const updateUsage = (subscriptionId) => {
   return dbConnect.collection("usage").updateOne(listingQuery, updates);
 };
 
+const terminateSubscription = (debtor, payee) => {
+  const address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+  const abi = [
+    "function terminateSubscription(address debtor, address payee) external",
+  ];
+  const contract = new ethers.Contract(address, abi, web3.getSigner());
+  return contract.terminateSubscription(debtor, payee);
+};
+
 export {
   getDocuments,
   addDocument,
@@ -64,4 +76,5 @@ export {
   updateUsage,
   deleteDocument,
   setDb,
+  terminateSubscription,
 };
