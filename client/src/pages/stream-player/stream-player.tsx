@@ -81,8 +81,8 @@ const StreamPlayer: FC = () => {
           authData.selectedAddress,
           "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
         );
-      if (subscription[5] !== 1) {
-        navigate("/streams");
+      if (subscription[5] === 2) {
+        navigate("/subscription-end");
       }
     };
 

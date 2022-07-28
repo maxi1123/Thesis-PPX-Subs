@@ -22,6 +22,7 @@ const addDocument = (subscriptionId, usage = 0, debtor, payee, start, end) => {
     payee: payee,
     createdAt: start,
     expiresAt: end,
+    status: "ACTIVE",
   };
   return dbConnect.collection("usage").insertOne(usageDocument);
 };

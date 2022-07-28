@@ -52,7 +52,7 @@ const SetupSubTab: FC = () => {
     const response = await storeContract.newDailySubscription(
       "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
       now,
-      now + DAY_IN_SECONDS
+      now + 600
     );
     await provider.waitForTransaction(response.hash);
     const subscription = await storeContract.activeSubscriptionFromUser(
@@ -65,7 +65,7 @@ const SetupSubTab: FC = () => {
       debtor: authData.selectedAddress,
       payee: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
       createdAt: now,
-      expiresAt: now + DAY_IN_SECONDS,
+      expiresAt: now + 600,
     });
     authData.onboardingStatus = ONBOARDING_STATUS.Completed;
     authData.setAuthContext({ ...authData });

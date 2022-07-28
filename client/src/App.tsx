@@ -12,6 +12,7 @@ import { useAuthStatus } from "./hooks/use-auth-status";
 import { ProgressSpinner } from "primereact/progressspinner";
 import styles from "./app.module.css";
 import AppRoutes from "./routes/app-routes";
+import { useSubscriptionGuard } from "./hooks/use-subscription-guard";
 
 PrimeReact.ripple = true;
 
@@ -20,6 +21,7 @@ function App() {
 
   // Initializes the context after defaultValue was used
   useAuthStatus(setAuthContext);
+  useSubscriptionGuard();
 
   useEffect(() => {
     if (typeof (window as any).ethereum !== "undefined") {
