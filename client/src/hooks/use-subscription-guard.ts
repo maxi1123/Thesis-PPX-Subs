@@ -18,8 +18,7 @@ export const useSubscriptionGuard = () => {
       provider.getSigner()
     );
     setInterval(async () => {
-      if (location.pathname === "/" || location.pathname === "/onboarding") {
-      } else {
+      if (location.pathname !== "/" && location.pathname !== "/onboarding") {
         const subscription =
           await subscriptionStoreContract.activeSubscriptionFromUser(
             authData.selectedAddress,
