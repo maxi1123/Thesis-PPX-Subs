@@ -31,7 +31,7 @@ const SubscriptionEnd: FC = () => {
         authData.selectedAddress,
         "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
       );
-    await axios.post("https://5987-89-206-112-12.eu.ngrok.io/api/v1/usage", {
+    await axios.post("https://682f-89-206-112-13.eu.ngrok.io/api/v1/usage", {
       subscriptionId: subscription[0],
       usage: 0,
       debtor: authData.selectedAddress,

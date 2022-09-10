@@ -19,16 +19,20 @@ export const useSubscriptionGuard = () => {
     );
     setInterval(async () => {
       if (location.pathname !== "/" && location.pathname !== "/onboarding") {
-        const subscription =
-          await subscriptionStoreContract.activeSubscriptionFromUser(
-            authData.selectedAddress,
-            "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
-          );
-        if (
-          subscription[5] === 2 &&
-          location.pathname !== "/subscription-end"
-        ) {
-          navigate("/subscription-end");
+        try {
+          const subscription =
+            await subscriptionStoreContract.activeSubscriptionFromUser(
+              authData.selectedAddress,
+              "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+            );
+          if (
+            subscription[5] === 2 &&
+            location.pathname !== "/subscription-end"
+          ) {
+            navigate("/subscription-end");
+          }
+        } catch (e) {
+          console.log(e);
         }
       }
     }, 5000);

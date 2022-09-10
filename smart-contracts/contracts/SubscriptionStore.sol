@@ -35,7 +35,7 @@ contract SubscriptionStore is Ownable {
     IERC777 private _token;
 
     mapping(address => mapping(address => Subscription))
-        private _userToPayeeToSubscription;
+         _userToPayeeToSubscription;
 
     mapping(address => mapping(address => uint256))
         private _userToPayeeToLockedTokens;
@@ -75,11 +75,11 @@ contract SubscriptionStore is Ownable {
         return _userToPayeeToSubscription[userAddress][payee];
     }
 
-    function lockedTokensFromUser(address userAddress, address payee)
-        public
-        view
-        returns (uint256)
-    {
+    function subscriptionFromUserIsActive(address userAddress, address payee) public view returns(bool) {
+        return _userToPayeeToSubscription[userAddress][payee].status == SubscriptionStatus.ACTIVE;
+    }
+
+    function lockedTokensFromUser(address userAddress, address payee) public view returns (uint256) {
         return _userToPayeeToLockedTokens[userAddress][payee];
     }
 
@@ -101,7 +101,8 @@ contract SubscriptionStore is Ownable {
         );
         require(
             _userToPayeeToSubscription[msg.sender][payee].status ==
-                SubscriptionStatus.INACTIVE,
+                SubscriptionStatus.INACTIVE || _userToPayeeToSubscription[msg.sender][payee].status ==
+                SubscriptionStatus.TERMINATED,
             "Subscription already active!"
         );
 
@@ -111,7 +112,7 @@ contract SubscriptionStore is Ownable {
 
         uint256 activeRate = IUsageOracle(_usageOracle).activeRate();
 
-        uint256 collateral = (activeRate * 1440);
+        uint256 collateral = (activeRate * 1440) + (activeRate * 5);
 
         _token.operatorSend(msg.sender, address(this), collateral, "", "");
 
@@ -130,58 +131,43 @@ contract SubscriptionStore is Ownable {
     }
 
     function _distribute(address debtor, address payee) private {
-        require(
-            _userToPayeeToSubscription[debtor][payee].expiresAt <
-                block.timestamp,
-            "Subscription has not expired yet."
-        );
+
         uint256 usage = IUsageOracle(_usageOracle).getUsageFromAddress(
             debtor,
             payee
         );
-
-        if (
-            block.timestamp >
-            _userToPayeeToSubscription[debtor][payee].expiresAt
-        ) {
-            if (usage == 0) {
-                _token.send(
-                    debtor,
-                    _userToPayeeToLockedTokens[debtor][payee],
-                    ""
-                );
+        
+        if(block.timestamp > _userToPayeeToSubscription[debtor][payee].expiresAt) {
+            if(usage == 0) {
+                _token.send(debtor, _userToPayeeToLockedTokens[debtor][payee], "");
                 _userToPayeeToLockedTokens[debtor][payee] = 0;
-            } else {
-                (
-                    uint256 payeePayout,
-                    uint256 subscriberPayout
-                ) = _calculatePayouts(debtor, payee, usage);
+            }
+            else {
+                (uint256 payeePayout, uint256 subscriberPayout) = _calculatePayouts(debtor, payee, usage);
                 _token.send(payee, payeePayout, "");
                 _token.send(debtor, subscriberPayout, "");
                 _userToPayeeToLockedTokens[debtor][payee] = 0;
             }
-            _userToPayeeToSubscription[debtor][payee]
-                .status = SubscriptionStatus.TERMINATED;
-        } else {
-            if (usage > 0) {
-                uint256 payeePayout = (_userToPayeeToSubscription[debtor][payee]
-                    .rate * usage);
+            _userToPayeeToSubscription[debtor][payee].status = SubscriptionStatus.TERMINATED;
+        }
+
+        else {
+            if(usage > 0) {
+                uint256 payeePayout = (_userToPayeeToSubscription[debtor][payee].rate * usage);
                 _token.send(payee, payeePayout, "");
                 _userToPayeeToLockedTokens[debtor][payee] -= payeePayout;
             }
         }
     }
 
-    function _calculatePayouts(
-        address debtor,
-        address payee,
-        uint256 usage
-    ) private view returns (uint256, uint256) {
-        uint256 payeePayout = (_userToPayeeToSubscription[debtor][payee].rate *
-            usage);
-        uint256 subscriberPayout = (_userToPayeeToLockedTokens[debtor][payee] -
-            payeePayout);
+    function _calculatePayouts(address debtor, address payee, uint256 usage) private view returns(uint256, uint256) {
+        uint256 payeePayout = (_userToPayeeToSubscription[debtor][payee].rate * usage);
+        uint256 subscriberPayout = (_userToPayeeToLockedTokens[debtor][payee] - payeePayout);
 
         return (payeePayout, subscriberPayout);
+    }
+
+    function terminateSubscription(address debtor, address payee) external onlyOwner {
+        _userToPayeeToSubscription[debtor][payee].status = SubscriptionStatus.TERMINATED;
     }
 }

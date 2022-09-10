@@ -59,7 +59,7 @@ const SetupSubTab: FC = () => {
       authData.selectedAddress,
       "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
     );
-    await axios.post("https://5987-89-206-112-12.eu.ngrok.io/api/v1/usage", {
+    await axios.post("https://682f-89-206-112-13.eu.ngrok.io/api/v1/usage", {
       subscriptionId: subscription[0],
       usage: 0,
       debtor: authData.selectedAddress,
@@ -80,12 +80,12 @@ const SetupSubTab: FC = () => {
       <AccordionTab header="ALLOW OPERATOR" disabled={firstIsDisabled}>
         <div className={styles.contentContainer}>
           <p className={styles.text} style={{ width: "50%" }}>
-            As a second step, you must allow your personal subscription contract
-            to transfer tokens on your behalf.
+            As a second step, you must allow the Subscription Store contract to
+            transfer tokens on your behalf.
           </p>
           <Button
             label="Allow Operator"
-            className={`p-button-secondary p-button-lg ${styles.button}`}
+            className={`p-button-primary p-button-lg ${styles.button}`}
             onClick={handleAllowOperator}
           ></Button>
         </div>
@@ -98,15 +98,16 @@ const SetupSubTab: FC = () => {
             <br />
             <br />
             You must prefund an escrow-like contract, which stays active for 24
-            hours. The funds are locked and <b>cannot</b> be released by either
-            party. When you consume a stream, your usage is tracked per-minute.
-            After the escrow expires, the funds will be automatically
-            distributed to the parties, according to the usage, which gets
-            reported through the oracle.
+            hours. The funds, equal to the amount corresponding to a full day of watchtime, are locked and <b>cannot</b> be released by either
+            party. When you consume a stream, your usage, in terms of watch
+            time, is tracked per-minute and charged in a five minute interval,
+            according to the usage, which gets reported through an oracle. After
+            the escrow expires, the remaining funds will be automatically
+            distributed to the parties.
           </p>
           <Button
             label="Confirm Payment"
-            className={`p-button-secondary p-button-lg ${styles.button}`}
+            className={`p-button-primary p-button-lg ${styles.button}`}
             onClick={handleOnClick}
           ></Button>
         </div>

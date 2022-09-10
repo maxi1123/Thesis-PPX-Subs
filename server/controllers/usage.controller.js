@@ -61,12 +61,13 @@ async function postToOracle(req, res) {
     ) {
       throw new Error("Faulty JSON!");
     }
-    await usageService.postToOracle(
+    const tx = await usageService.postToOracle(
       req.body.debtor,
       req.body.payee,
       req.body.usage
     );
     console.log(`Posted to Oracle!`);
+    console.log(tx);
     res.status(204).send();
   } catch (err) {
     console.error(`Error `, err.message);

@@ -63,7 +63,7 @@ const StreamPlayer: FC = () => {
   useEffect(() => {
     const _fetchStreamUrl = async () => {
       const response = await axios.post(
-        "https://5987-89-206-112-12.eu.ngrok.io/api/v1/streams",
+        "https://682f-89-206-112-13.eu.ngrok.io/api/v1/streams",
         {
           channelId: channel,
         }
@@ -128,7 +128,7 @@ const StreamPlayer: FC = () => {
             "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
           );
         await axios.post(
-          "https://5987-89-206-112-12.eu.ngrok.io/api/v1/usage/db",
+          "https://682f-89-206-112-13.eu.ngrok.io/api/v1/usage/db",
           {
             subscriptionId: subscription[0],
           }
@@ -149,7 +149,7 @@ const StreamPlayer: FC = () => {
         60 - timeCredit.current
       ) {
         await axios.post(
-          "https://5987-89-206-112-12.eu.ngrok.io/api/v1/usage/db",
+          "https://682f-89-206-112-13.eu.ngrok.io/api/v1/usage/db",
           {
             subscriptionId: subscriptionIdRef.current,
           }
@@ -160,7 +160,7 @@ const StreamPlayer: FC = () => {
     } else {
       if (now - (lastReportedUnixRef.current as number) >= 60) {
         await axios.post(
-          "https://5987-89-206-112-12.eu.ngrok.io/api/v1/usage/db",
+          "https://682f-89-206-112-13.eu.ngrok.io/api/v1/usage/db",
           {
             subscriptionId: subscriptionIdRef.current,
           }
