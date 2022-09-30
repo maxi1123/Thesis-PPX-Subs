@@ -20,7 +20,7 @@ const subscriptionStoreContract = new ethers.Contract(
 );
 
 const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
-const PAYEE = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
+const PAYEE = "0x56d8b3F239BFc78E10fb66792eE89F3dD1B8B17f";
 
 export const useAuthStatus = (
   callback: React.Dispatch<SetStateAction<AuthDataI>>

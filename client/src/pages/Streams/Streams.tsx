@@ -7,7 +7,7 @@ import { AuthContext } from "../../context/auth-context";
 import StreamGrid from "../../components/stream-grid/stream-grid";
 import { useNavigate } from "react-router-dom";
 
-const PAYEE = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
+const PAYEE = "0x56d8b3F239BFc78E10fb66792eE89F3dD1B8B17f";
 
 const Streams: FC = () => {
   const provider = useWeb3Provider();

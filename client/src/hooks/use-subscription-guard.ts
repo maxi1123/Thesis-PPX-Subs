@@ -23,7 +23,7 @@ export const useSubscriptionGuard = () => {
           const subscription =
             await subscriptionStoreContract.activeSubscriptionFromUser(
               authData.selectedAddress,
-              "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+              "0x56d8b3F239BFc78E10fb66792eE89F3dD1B8B17f"
             );
           if (
             subscription[5] === 2 &&

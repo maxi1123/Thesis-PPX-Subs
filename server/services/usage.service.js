@@ -1,6 +1,6 @@
-import ethers from "ethers";
-import * as dbo from "../db/conn.js";
-import * as web3 from "../web3/conn.js";
+import ethers from 'ethers';
+import * as dbo from '../db/conn.js';
+import * as web3 from '../web3/conn.js';
 
 let dbConnect;
 
@@ -10,7 +10,7 @@ const setDb = () => {
 
 // get all documents
 const getDocuments = () => {
-  return dbConnect.collection("usage").find({}).toArray();
+  return dbConnect.collection('usage').find({}).toArray();
 };
 
 // post initial subscription to database
@@ -22,31 +22,31 @@ const addDocument = (subscriptionId, usage = 0, debtor, payee, start, end) => {
     payee: payee,
     createdAt: start,
     expiresAt: end,
-    status: "ACTIVE",
+    status: 'ACTIVE',
   };
-  return dbConnect.collection("usage").insertOne(usageDocument);
+  return dbConnect.collection('usage').insertOne(usageDocument);
 };
 
 // delete subscription from database
 const deleteDocument = (subscriptionId) => {
   const listingQuery = { subscription_id: subscriptionId };
-  return dbConnect.collection("usage").deleteOne(listingQuery);
+  return dbConnect.collection('usage').deleteOne(listingQuery);
 };
 
 // @calledBy Database
 // post usage to oracle
 const postToOracle = async (debtor, payee, usage) => {
-  const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const address = '0x3F7E55720eF26c58c7e312FE42eB7001497F0e06';
   const abi = [
-    "function setUsage(address debtor, address payee, uint256 usage) public",
+    'function setUsage(address debtor, address payee, uint256 usage) public',
   ];
   const contract = new ethers.Contract(address, abi, web3.getSigner());
   console.log(await web3.getSigner().getAddress());
   console.log(payee, usage);
 
-  return "$numberLong" in usage
-    ? contract.setUsage(debtor, payee, Number(usage["$numberLong"]))
-    : contract.setUsage(debtor, payee, Number(usage["$numberInt"]));
+  return '$numberLong' in usage
+    ? contract.setUsage(debtor, payee, Number(usage['$numberLong']))
+    : contract.setUsage(debtor, payee, Number(usage['$numberInt']));
 };
 
 // increases usage counter
@@ -58,13 +58,13 @@ const updateUsage = (subscriptionId) => {
     },
   };
 
-  return dbConnect.collection("usage").updateOne(listingQuery, updates);
+  return dbConnect.collection('usage').updateOne(listingQuery, updates);
 };
 
 const terminateSubscription = (debtor, payee) => {
-  const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const address = '0x065cc7bD39abfa21E0e245D4704Ab2522b21D11f';
   const abi = [
-    "function terminateSubscription(address debtor, address payee) external",
+    'function terminateSubscription(address debtor, address payee) external',
   ];
   const contract = new ethers.Contract(address, abi, web3.getSigner());
   return contract.terminateSubscription(debtor, payee);

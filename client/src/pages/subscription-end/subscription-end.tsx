@@ -1,12 +1,12 @@
-import axios from "axios";
-import { ethers } from "ethers";
-import { Button } from "primereact/button";
-import { FC, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import * as web3 from "../../constants/contract-metadata";
-import { AuthContext } from "../../context/auth-context";
-import { useWeb3Provider } from "../../hooks/use-web3-provider";
-import styles from "./subscription-end.module.css";
+import axios from 'axios';
+import { ethers } from 'ethers';
+import { Button } from 'primereact/button';
+import { FC, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as web3 from '../../constants/contract-metadata';
+import { AuthContext } from '../../context/auth-context';
+import { useWeb3Provider } from '../../hooks/use-web3-provider';
+import styles from './subscription-end.module.css';
 
 const SubscriptionEnd: FC = () => {
   const provider = useWeb3Provider();
@@ -21,7 +21,7 @@ const SubscriptionEnd: FC = () => {
     const now = Math.floor(new Date().getTime() / 1000.0);
     const DAY_IN_SECONDS = 86400;
     const response = await subscriptionStoreContract.newDailySubscription(
-      "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      '0x56d8b3F239BFc78E10fb66792eE89F3dD1B8B17f',
       now,
       now + DAY_IN_SECONDS
     );
@@ -29,17 +29,17 @@ const SubscriptionEnd: FC = () => {
     const subscription =
       await subscriptionStoreContract.activeSubscriptionFromUser(
         authData.selectedAddress,
-        "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+        '0x56d8b3F239BFc78E10fb66792eE89F3dD1B8B17f'
       );
-    await axios.post("https://682f-89-206-112-13.eu.ngrok.io/api/v1/usage", {
+    await axios.post('https://0cc1-89-206-112-10.eu.ngrok.io/api/v1/usage', {
       subscriptionId: subscription[0],
       usage: 0,
       debtor: authData.selectedAddress,
-      payee: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      payee: '0x56d8b3F239BFc78E10fb66792eE89F3dD1B8B17f',
       createdAt: now,
       expiresAt: now + DAY_IN_SECONDS,
     });
-    navigate("/streams");
+    navigate('/streams');
   };
   return (
     <div className={styles.root}>

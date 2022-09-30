@@ -56,20 +56,20 @@ const SetupSubTab: FC = () => {
     const now = Math.floor(new Date().getTime() / 1000.0);
     const DAY_IN_SECONDS = 86400;
     const response = await storeContract.newDailySubscription(
-      "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      "0x56d8b3F239BFc78E10fb66792eE89F3dD1B8B17f",
       now,
       now + 600
     );
     await provider.waitForTransaction(response.hash);
     const subscription = await storeContract.activeSubscriptionFromUser(
       authData.selectedAddress,
-      "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      "0x56d8b3F239BFc78E10fb66792eE89F3dD1B8B17f"
     );
-    await axios.post("https://682f-89-206-112-13.eu.ngrok.io/api/v1/usage", {
+    await axios.post("https://0cc1-89-206-112-10.eu.ngrok.io/api/v1/usage", {
       subscriptionId: subscription[0],
       usage: 0,
       debtor: authData.selectedAddress,
-      payee: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      payee: "0x56d8b3F239BFc78E10fb66792eE89F3dD1B8B17f",
       createdAt: now,
       expiresAt: now + 600,
     });

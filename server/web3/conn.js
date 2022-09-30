@@ -1,14 +1,16 @@
-import ethers from "ethers";
+import ethers from 'ethers';
 
 let provider;
 let signer;
 
 const init = () => {
-  const defaultProvider = new ethers.providers.getDefaultProvider(
-    "http://localhost:8545"
-  );
+  const urlInfo = {
+    url: 'https://nd-359-001-579.p2pify.com/5c0ae8a7eb271107a8c43136310985d5',
+  };
+
+  const defaultProvider = new ethers.providers.JsonRpcProvider(urlInfo, 4002);
   signer = new ethers.Wallet(
-    "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
+    '890e3e4013ba0bdefc50e1cfd796fece7bdbd874bcc3b5d56c019110ebc0a524',
     defaultProvider
   );
   provider = signer.provider;
