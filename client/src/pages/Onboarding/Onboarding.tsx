@@ -23,7 +23,18 @@ const Onboarding: FC = () => {
 
   return (
     <div className={styles.parentContainer}>
-      <Panel className={styles.panel} header="ONBOARDING">
+      {activeIndex === 0 && (
+        <ConnectWalletTab callback={(x: number) => setActiveIndex(x)} />
+      )}
+      {activeIndex === 1 && <SetupSubTab />}
+    </div>
+  );
+};
+
+export default Onboarding;
+
+{
+  /* <Panel className={styles.panel} header="ONBOARDING">
         <Steps
           model={items}
           activeIndex={activeIndex}
@@ -35,9 +46,5 @@ const Onboarding: FC = () => {
           ""
         )}
         {activeIndex === 1 ? <SetupSubTab /> : ""}
-      </Panel>
-    </div>
-  );
-};
-
-export default Onboarding;
+      </Panel> */
+}

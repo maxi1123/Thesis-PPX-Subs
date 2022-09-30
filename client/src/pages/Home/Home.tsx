@@ -21,7 +21,7 @@ const Home: FC = () => {
           <Button
             label="Next"
             icon="pi pi-arrow-right"
-            className="p-button-primary p-button-lg"
+            className={`p-button-primary p-button-lg ${styles.button}`}
             iconPos="right"
             onClick={handleOnClick}
           />

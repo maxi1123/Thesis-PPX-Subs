@@ -2,7 +2,6 @@ import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import { Button } from "primereact/button";
-import { Accordion, AccordionTab } from "primereact/accordion";
 
 import * as web3 from "../../../constants/contract-metadata";
 
@@ -14,16 +13,25 @@ import axios from "axios";
 
 const SetupSubTab: FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [firstIsDisabled, setFirstIsDisabled] = useState<boolean>(false);
-  const [secondIsDisabled, setSecondIsDisabled] = useState<boolean>(true);
+  const [activeRate, setActiveRate] = useState<number>(0);
   const authData = useContext(AuthContext);
   const navigate = useNavigate();
   const provider = useWeb3Provider();
 
   useEffect(() => {
+    const fetchRate = async () => {
+      const oracleContract = new ethers.Contract(
+        web3.ORACLE_ADDRESS,
+        web3.ORACLE_ABI,
+        provider
+      );
+      const activeR = await oracleContract.activeRate();
+      setActiveRate(activeR.toNumber());
+    };
     if (authData.onboardingStatus === ONBOARDING_STATUS.Operator) {
       setActiveIndex(1);
     }
+    fetchRate();
   }, [authData.onboardingStatus]);
 
   const handleAllowOperator = async () => {
@@ -34,8 +42,6 @@ const SetupSubTab: FC = () => {
     );
     const response = await tokenContract.authorizeOperator(web3.STORE_ADDRESS);
     await provider.waitForTransaction(response.hash);
-    setSecondIsDisabled(false);
-    setFirstIsDisabled(true);
     authData.onboardingStatus = ONBOARDING_STATUS.Operator;
     authData.setAuthContext({ ...authData });
     setActiveIndex(1);
@@ -72,48 +78,232 @@ const SetupSubTab: FC = () => {
     navigate("/streams");
   };
   return (
-    <Accordion
-      activeIndex={activeIndex}
-      onTabChange={(e) => setActiveIndex(e.index)}
-      className={styles.customAccordion}
-    >
-      <AccordionTab header="ALLOW OPERATOR" disabled={firstIsDisabled}>
-        <div className={styles.contentContainer}>
-          <p className={styles.text} style={{ width: "50%" }}>
-            As a second step, you must allow the Subscription Store contract to
-            transfer tokens on your behalf.
+    <>
+      <div
+        className={`${styles.subContainer} ${
+          activeIndex !== 0 ? styles.applyOpacity : ""
+        }`}
+      >
+        <h2 className={styles.headerText}>ONBOARDING 1/2</h2>
+        <div className={styles.divider} />
+        <p className={styles.textAlt}>
+          As a preparation for the last onboarding step you must allow the smart
+          contract to transfer tokens from your balance
+        </p>
+        <div className={styles.iconWrapper}>
+          <div className={styles.iconBackdrop}>
+            <i
+              className="pi pi-angle-double-right"
+              style={{ fontSize: "15px", color: "#24b47e" }}
+            ></i>
+          </div>
+          <p
+            style={{
+              fontSize: "15px",
+              color: "#525f7f",
+              marginLeft: "10px",
+              lineHeight: "26px",
+            }}
+          >
+            The provider cannot abuse this allowance as it is given exclusively to the smart
+            contract
           </p>
+        </div>
+        <div className={styles.iconWrapper}>
+          <div className={styles.iconBackdrop}>
+            <i
+              className="pi pi-angle-double-right"
+              style={{ fontSize: "15px", color: "#24b47e" }}
+            ></i>
+          </div>
+          <p
+            style={{
+              fontSize: "15px",
+              color: "#525f7f",
+              marginLeft: "10px",
+              lineHeight: "26px",
+            }}
+          >
+            The smart contract solely needs the allowance for the prefunding
+            mechanism as this necessitates transferring tokens from your balance
+          </p>
+        </div>
+        <div className={styles.iconWrapper}>
+          <div className={styles.iconBackdropAlt}>
+            <i
+              className="pi pi-exclamation-triangle"
+              style={{ fontSize: "15px", color: "#b42424" }}
+            ></i>
+          </div>
+          <p
+            style={{
+              fontSize: "15px",
+              color: "#525f7f",
+              marginLeft: "10px",
+              lineHeight: "26px",
+            }}
+          >
+            If in doubt the allowance can always be revoked
+          </p>
+        </div>
+        <div className={styles.buttonWrapper}>
           <Button
-            label="Allow Operator"
+            label="Give allowance"
+            disabled={activeIndex !== 0}
             className={`p-button-primary p-button-lg ${styles.button}`}
             onClick={handleAllowOperator}
           ></Button>
         </div>
-      </AccordionTab>
-      <AccordionTab header="CONFIRM PAYMENT" disabled={secondIsDisabled}>
-        <div className={styles.contentContainer}>
-          <p className={styles.text} style={{ width: "50%" }}>
-            As a third and last step, you must set up the payment scheme. This
-            works as follows:
-            <br />
-            <br />
-            You must prefund an escrow-like contract, which stays active for 24
-            hours. The funds, equal to the amount corresponding to a full day of watchtime, are locked and <b>cannot</b> be released by either
-            party. When you consume a stream, your usage, in terms of watch
-            time, is tracked per-minute and charged in a five minute interval,
-            according to the usage, which gets reported through an oracle. After
-            the escrow expires, the remaining funds will be automatically
-            distributed to the parties.
+      </div>
+      <div
+        className={`${styles.subContainer} ${
+          activeIndex !== 1 ? styles.applyOpacity : ""
+        }`}
+      >
+        <h2 className={styles.headerText}>ONBOARDING 2/2</h2>
+        <div className={styles.divider} />
+        <p className={styles.textAlt}>
+          To get access to the service you must lock funds equal to the amount
+          worth 24 hours (1440 minutes) of watchtime
+        </p>
+        <div className={styles.activeRateWrapper}>
+          <p className={styles.activeRateValue}>{activeRate}</p>
+          <p style={{ fontSize: "17px", color: '#32325d', marginLeft: "10px" }}>= 0.0017$</p>
+        </div>
+        <div className={styles.flexWrapper}>
+          <p style={{ fontSize: "14px", color: "#8898aa"}}>
+            at the start of each minute
           </p>
+        </div>
+        <div className={styles.iconWrapper}>
+          <div className={styles.iconBackdrop}>
+            <i
+              className="pi pi-angle-double-right"
+              style={{ fontSize: "15px", color: "#24b47e" }}
+            ></i>
+          </div>
+          <p
+            style={{
+              fontSize: "15px",
+              color: "#525f7f",
+              marginLeft: "10px",
+              lineHeight: "26px",
+            }}
+          >
+            The smart contract transfers an amount of {1440*activeRate} tokens (1440 min * {activeRate}) from your balance to
+            itself and locks it
+          </p>
+        </div>
+        <div className={styles.iconWrapper}>
+          <div className={styles.iconBackdrop}>
+            <i
+              className="pi pi-angle-double-right"
+              style={{ fontSize: "15px", color: "#24b47e" }}
+            ></i>
+          </div>
+          <p
+            style={{
+              fontSize: "15px",
+              color: "#525f7f",
+              marginLeft: "10px",
+              lineHeight: "26px",
+            }}
+          >
+            From the locked balance each minute the smart contract sends the
+            payout to the provider according to the above rate
+          </p>
+        </div>
+        <div className={styles.iconWrapper}>
+          <div className={styles.iconBackdrop}>
+            <i
+              className="pi pi-angle-double-right"
+              style={{ fontSize: "15px", color: "#24b47e" }}
+            ></i>
+          </div>
+          <p
+            style={{
+              fontSize: "15px",
+              color: "#525f7f",
+              marginLeft: "10px",
+              lineHeight: "26px",
+            }}
+          >
+            The provider has no access to your locked tokens, only the smart
+            contract can execute payouts
+          </p>
+        </div>
+        <div className={styles.iconWrapper}>
+          <div className={styles.iconBackdropAlt}>
+            <i
+              className="pi pi-money-bill"
+              style={{ fontSize: "15px", color: "#b42424" }}
+            ></i>
+          </div>
+          <p
+            style={{
+              fontSize: "15px",
+              color: "#525f7f",
+              marginLeft: "10px",
+              lineHeight: "26px",
+            }}
+          >
+            You will get all unused funds back automatically after the 24 hour
+            period expires
+          </p>
+        </div>
+        <div className={styles.buttonWrapper}>
           <Button
-            label="Confirm Payment"
+            label="Lock tokens"
+            disabled={activeIndex !== 1}
             className={`p-button-primary p-button-lg ${styles.button}`}
             onClick={handleOnClick}
           ></Button>
         </div>
-      </AccordionTab>
-    </Accordion>
+      </div>
+    </>
   );
 };
 
 export default SetupSubTab;
+
+// <Accordion
+//   activeIndex={activeIndex}
+//   onTabChange={(e) => setActiveIndex(e.index)}
+//   className={styles.customAccordion}
+// >
+//   <AccordionTab header="ALLOW OPERATOR" disabled={firstIsDisabled}>
+//     <div className={styles.contentContainer}>
+//       <p className={styles.text} style={{ width: "50%" }}>
+//         As a second step, you must allow the Subscription Store contract to
+//         transfer tokens on your behalf.
+//       </p>
+//       <Button
+//         label="Allow Operator"
+//         className={`p-button-primary p-button-lg ${styles.button}`}
+//         onClick={handleAllowOperator}
+//       ></Button>
+//     </div>
+//   </AccordionTab>
+//   <AccordionTab header="CONFIRM PAYMENT" disabled={secondIsDisabled}>
+//     <div className={styles.contentContainer}>
+//       <p className={styles.text} style={{ width: "50%" }}>
+//         As a third and last step, you must set up the payment scheme. This
+//         works as follows:
+//         <br />
+//         <br />
+//         You must prefund an escrow-like contract, which stays active for 24
+//         hours. The funds, equal to the amount corresponding to a full day of watchtime, are locked and <b>cannot</b> be released by either
+//         party. When you consume a stream, your usage, in terms of watch
+//         time, is tracked per-minute and charged in a five minute interval,
+//         according to the usage, which gets reported through an oracle. After
+//         the escrow expires, the remaining funds will be automatically
+//         distributed to the parties.
+//       </p>
+// <Button
+//   label="Confirm Payment"
+//   className={`p-button-primary p-button-lg ${styles.button}`}
+//   onClick={handleOnClick}
+// ></Button>
+//     </div>
+//   </AccordionTab>
+// </Accordion>

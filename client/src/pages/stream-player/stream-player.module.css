@@ -20,3 +20,8 @@
   font-weight: 300;
   letter-spacing: 2px;
 }
+
+.button {
+  background-color: #24b47e;
+  border: 1px solid #1fa272;
+}

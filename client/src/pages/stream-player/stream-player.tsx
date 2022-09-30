@@ -181,7 +181,7 @@ const StreamPlayer: FC = () => {
             <h2 className={styles.subtitle}>Enjoy your stream!</h2>
             <Button
               label="Go Back to Channel Selection"
-              className={`p-button-primary p-button-lg`}
+              className={`p-button-primary p-button-lg ${styles.button}`}
               icon="pi pi-arrow-left"
               iconPos="left"
               onClick={() => navigate("/streams")}

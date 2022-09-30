@@ -36,3 +36,8 @@
   align-items: center;
   padding-bottom: 2rem;
 }
+
+.button {
+  background-color: #24b47e;
+  border: 1px solid #1fa272;
+}

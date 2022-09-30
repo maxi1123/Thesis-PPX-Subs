@@ -24,7 +24,7 @@ const ConnectWalletTab: FC<ConnectWalletTabPropsI> = ({ callback }) => {
     callback(1);
   };
   return (
-    <div className={styles.contentContainer}>
+    <div className={styles.walletContainer}>
       <p className={styles.text}>
         As a first step, please connect your MetaMask wallet
       </p>

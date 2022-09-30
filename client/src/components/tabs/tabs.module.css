@@ -1,23 +1,108 @@
-.contentContainer {
-  margin-top: 3rem;
+.walletContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 15px 35px rgb(50 50 93 / 10%), 0 5px 15px rgb(0 0 0 / 7%);
+  border-radius: 4px;
+  background-color: white;
+  height: 150px;
+  padding: 2rem;
+}
+
+.subContainer,
+.subContainerAlt {
+  width: 560px;
+  box-shadow: 0 15px 35px rgb(50 50 93 / 10%), 0 5px 15px rgb(0 0 0 / 7%);
+  border-radius: 4px;
+  background-color: white;
+  padding-top: 35px;
+  margin: 0 10px;
+}
+
+.headerText {
+  font-weight: 500;
+  font-size: 18px;
+  color: #24b47e;
+  letter-spacing: 0.025em;
+  text-align: center;
+}
+
+.text,
+.textAlt {
+  font-weight: 400;
+  font-size: 19px;
+  color: #525f7f;
+}
+
+.textAlt {
+  margin: 0 auto;
+  max-width: 460px;
+  text-align: center;
+  padding: 0 40px 20px;
+  line-height: 29px;
+}
+
+.divider {
+  border-bottom: 2px solid #eaeef1;
+  align-self: stretch;
+  margin: 20px 0;
+}
+
+.activeRateWrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  margin-top: 30px;
 }
 
-.text {
-  font-weight: 300;
+.flexWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
 }
 
-.userAddress {
-  letter-spacing: 2px;
-}
-
-.button {
-  margin-top: 3rem;
+.activeRateValue {
+  font-size: 55px;
+  color: #32325d;
+  line-height: 0;
 }
 
 .customAccordion {
   margin-top: 3rem;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: flex-start;
+  margin: 15px 40px;
+  padding: 0 40px 20px;
+}
+
+.iconBackdrop,
+.iconBackdropAlt {
+  border-radius: 100%;
+  padding: 5px;
+  background-color: #d6facf;
+}
+
+.iconBackdropAlt {
+  background-color: #facfcf;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+  background-color: #f6f9fc;
+  border-radius: 4px;
+}
+
+.button {
+  background-color: #24b47e;
+  border: 1px solid #1fa272;
+}
+
+.applyOpacity {
+  opacity: 0.5;
 }
