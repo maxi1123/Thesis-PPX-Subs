@@ -1,6 +1,6 @@
 # 🌟 Pay-per-Minute Streaming Portal
 
-The client is deployed [here](y-centaur-52717b.netlify.app). To use it, follow the steps outlined below.
+The client is deployed [here](https://zingy-centaur-52717b.netlify.app/). To use it, follow the steps outlined below.
 
 <b> ⚠️ It is important that these steps are completed before the client is interacted with ⚠️ </b>
 
