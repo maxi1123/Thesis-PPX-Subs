@@ -63,7 +63,7 @@ const StreamPlayer: FC = () => {
   useEffect(() => {
     const _fetchStreamUrl = async () => {
       const response = await axios.post(
-        "https://0cc1-89-206-112-10.eu.ngrok.io/api/v1/streams",
+        "https://evening-ocean-47800.herokuapp.com/api/v1/streams",
         {
           channelId: channel,
         }
@@ -128,7 +128,7 @@ const StreamPlayer: FC = () => {
             "0x56d8b3F239BFc78E10fb66792eE89F3dD1B8B17f"
           );
         await axios.post(
-          "https://0cc1-89-206-112-10.eu.ngrok.io/api/v1/usage/db",
+          "https://evening-ocean-47800.herokuapp.com/api/v1/usage/db",
           {
             subscriptionId: subscription[0],
           }
@@ -149,7 +149,7 @@ const StreamPlayer: FC = () => {
         60 - timeCredit.current
       ) {
         await axios.post(
-          "https://0cc1-89-206-112-10.eu.ngrok.io/api/v1/usage/db",
+          "https://evening-ocean-47800.herokuapp.com/api/v1/usage/db",
           {
             subscriptionId: subscriptionIdRef.current,
           }
@@ -160,7 +160,7 @@ const StreamPlayer: FC = () => {
     } else {
       if (now - (lastReportedUnixRef.current as number) >= 60) {
         await axios.post(
-          "https://0cc1-89-206-112-10.eu.ngrok.io/api/v1/usage/db",
+          "https://evening-ocean-47800.herokuapp.com/api/v1/usage/db",
           {
             subscriptionId: subscriptionIdRef.current,
           }

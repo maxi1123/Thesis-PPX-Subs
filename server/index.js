@@ -13,7 +13,7 @@ dbo.connectToServer((err) => {
   err ? handleError() : "";
   setDb();
   const BASE_URL = "/api/v1";
-  const port = 3333;
+  const port = process.env.PORT || 5000;
 
   const app = express();
 

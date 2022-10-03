@@ -21,5 +21,8 @@
     "query-string": "^7.1.1",
     "ws": "^8.8.0",
     "zattoo-unofficial-api": "^1.1.6"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }

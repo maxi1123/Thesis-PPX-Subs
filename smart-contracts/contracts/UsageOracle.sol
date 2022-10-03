@@ -44,7 +44,7 @@ contract UsageOracle is Ownable {
         address debtor,
         address payee,
         uint256 usage
-    ) public onlyOwner {
+    ) public {
         _userToPayeeToUsage[debtor][payee] = usage;
         ISubscriptionStore(_subscriptionStore).notifyUsageReceived(
             debtor,

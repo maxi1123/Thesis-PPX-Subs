@@ -65,7 +65,7 @@ const SetupSubTab: FC = () => {
       authData.selectedAddress,
       "0x56d8b3F239BFc78E10fb66792eE89F3dD1B8B17f"
     );
-    await axios.post("https://0cc1-89-206-112-10.eu.ngrok.io/api/v1/usage", {
+    await axios.post("https://evening-ocean-47800.herokuapp.com/api/v1/usage", {
       subscriptionId: subscription[0],
       usage: 0,
       debtor: authData.selectedAddress,
