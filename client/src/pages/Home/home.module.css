@@ -41,3 +41,13 @@
   background-color: #24b47e;
   border: 1px solid #1fa272;
 }
+
+.text {
+  margin-bottom: 2rem;
+}
+
+.logoWrapper {
+  margin-left: 7rem;
+  display: flex;
+  align-items: center;
+}

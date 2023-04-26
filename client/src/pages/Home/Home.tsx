@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 
 import logo from "../../assets/uzhlogo.svg";
+import verumLogo from "../../assets/verum-logo.png"
 import styles from "./home.module.css";
 
 const Home: FC = () => {
@@ -28,7 +29,10 @@ const Home: FC = () => {
         </div>
         <div className={styles.footer}>
           <p className={styles.text}>In collaboration with</p>
-          <img src={logo} style={{ height: "200px" }} className="logo" />
+          <div className={styles.logoWrapper}>
+            <img src={verumLogo} style={{ height: "130px" }} className="logo" />
+            <img src={logo} style={{ height: "100px" }} className="logo" />
+          </div>
         </div>
       </div>
     </>
